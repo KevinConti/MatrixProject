@@ -14,7 +14,21 @@ public class MatrixTest {
             }
         }
         Matrix myMatrix = new Matrix(table);
-        System.out.println(myMatrix);
         assertNotNull(myMatrix);
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void whenAddReceivesAWronglyFormattedMatrixAnErrorIsThrown(){
+        double[][] tableOne = new double[][]{
+                { 1, 2, 3 },
+                { 4, 5, 6 }
+        };
+        double[][] tableTwo = new double[][]{
+                { 3 },
+                { 10 }
+        };
+        Matrix matrixOne = new Matrix(tableOne);
+        Matrix matrixTwo = new Matrix(tableTwo);
+        Matrix.add(matrixOne, matrixTwo);
     }
 }
