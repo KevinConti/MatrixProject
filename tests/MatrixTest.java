@@ -1,6 +1,7 @@
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class MatrixTest {
@@ -30,5 +31,27 @@ public class MatrixTest {
         Matrix matrixOne = new Matrix(tableOne);
         Matrix matrixTwo = new Matrix(tableTwo);
         Matrix.add(matrixOne, matrixTwo);
+    }
+
+    @Test
+    public void whenAddReceivesAppropriateMatricesReturnsTheCorrectResult(){
+        double[][] tableOne = new double[][]{
+                { 1, 2, 3 },
+                { 4, 5, 6 }
+        };
+        double[][] tableTwo = new double[][]{
+                { 3, 4, 5 },
+                { 10, 12, 14 }
+        };
+        Matrix matrixOne = new Matrix(tableOne);
+        Matrix matrixTwo = new Matrix(tableTwo);
+        Matrix addedMatrix = Matrix.add(matrixOne, matrixTwo);
+
+        double[][] correctResultTable = new double[][]{
+                { 4, 6, 8 },
+                { 14, 17, 20 }
+        };
+        Matrix correctResult = new Matrix(correctResultTable);
+        assertArrayEquals(addedMatrix.getMatrix(), correctResult.getMatrix());
     }
 }
