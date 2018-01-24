@@ -92,8 +92,8 @@
       <file leaf-file-name="InputParserTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/InputParserTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="13" column="33" lean-forward="false" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+            <state relative-caret-position="169">
+              <caret line="34" column="43" lean-forward="false" selection-start-line="34" selection-start-column="43" selection-end-line="34" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -102,8 +102,8 @@
       <file leaf-file-name="data.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/data.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="309">
+              <caret line="49" column="8" lean-forward="false" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -385,7 +385,7 @@
       <option name="presentableId" value="Default" />
       <updated>1516649756556</updated>
       <workItem from="1516649757815" duration="5584000" />
-      <workItem from="1516828314825" duration="4842000" />
+      <workItem from="1516828314825" duration="5365000" />
     </task>
     <servers />
   </component>
@@ -393,17 +393,17 @@
     <history-entry file="InputParserTest - 2018.01.24 at 18h 29m 08s.xml">
       <configuration name="InputParserTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MatrixTest - 2018.01.22 at 16h 57m 59s.xml">
-      <configuration name="MatrixTest" configurationId="JUnit" />
+    <history-entry file="InputParserTest - 2018.01.24 at 18h 34m 15s.xml">
+      <configuration name="InputParserTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MatrixTest - 2018.01.22 at 16h 58m 06s.xml">
-      <configuration name="MatrixTest" configurationId="JUnit" />
+    <history-entry file="InputParserTest - 2018.01.24 at 18h 35m 59s.xml">
+      <configuration name="InputParserTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MatrixTest - 2018.01.22 at 16h 59m 51s.xml">
-      <configuration name="MatrixTest" configurationId="JUnit" />
+    <history-entry file="InputParserTest - 2018.01.24 at 18h 36m 48s.xml">
+      <configuration name="InputParserTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="VectorTest - 2018.01.24 at 16h 18m 16s.xml">
-      <configuration name="VectorTest" configurationId="JUnit" />
+    <history-entry file="InputParserTest - 2018.01.24 at 18h 37m 51s.xml">
+      <configuration name="InputParserTest" configurationId="JUnit" />
     </history-entry>
     <history-entry file="VectorTest - 2018.01.24 at 16h 18m 36s.xml">
       <configuration name="VectorTest" configurationId="JUnit" />
@@ -422,7 +422,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10426000" />
+    <option name="totallyTimeSpent" value="10949000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="694" extended-state="6" />
@@ -547,14 +547,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/data.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InputParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -568,10 +560,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/data.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="49" column="8" lean-forward="false" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tests/InputParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="13" column="33" lean-forward="false" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+        <state relative-caret-position="169">
+          <caret line="34" column="43" lean-forward="false" selection-start-line="34" selection-start-column="43" selection-end-line="34" selection-end-column="43" />
           <folding />
         </state>
       </provider>
