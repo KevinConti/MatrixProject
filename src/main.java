@@ -1,13 +1,10 @@
-import java.util.ArrayList;
-
 public class main {
     public static void main(String[] args){
-        InputParser ip = new InputParser();
-        String filepath = "data/data.txt";
-        Vector[][] vectors = ip.convertFile(filepath);
+        Vector[][] vectors = initializeVectorsFromFile("data/data.txt");
+    }
 
-        for (Vector vector : vectors[0]){
-            System.out.println(vector);
-        }
+    private static Vector[][] initializeVectorsFromFile(String filepath){
+        InputParser ip = new InputParser();
+        return ip.convertFile(filepath);
     }
 }
