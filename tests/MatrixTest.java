@@ -68,20 +68,16 @@ public class MatrixTest {
         Matrix testMatrixFour = Matrix.parseVector(testVectorFour);
 
         Matrix correctMatrixOne = new Matrix(new double[][]{
-                {2.0, 6.0},
-                {}
+                {2.0, 6.0}
         });
         Matrix correctMatrixTwo = new Matrix(new double[][]{
-                {3.0, 4.0},
-                {}
+                {3.0, 4.0}
         });
         Matrix correctMatrixThree = new Matrix(new double[][]{
-                {3.0, 8.0},
-                {}
+                {3.0, 8.0}
         });
         Matrix correctMatrixFour = new Matrix(new double[][]{
-                {4.0, 6.0},
-                {}
+                {4.0, 6.0}
         });
 
         assertArrayEquals(testMatrixOne.getMatrix(), correctMatrixOne.getMatrix());

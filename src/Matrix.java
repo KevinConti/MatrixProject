@@ -32,10 +32,15 @@ public class Matrix {
     }
 
     public static Matrix parseVector(Vector vector){
-        return new Matrix(new double[][]{
-                {},
-                {}
-        });
+
+        double x = vector.getX();
+        double y = vector.getY();
+
+        double[][] table = new double[1][2];
+        table[0][0] = x;
+        table[0][1] = y;
+        
+        return new Matrix(table);
     }
 
     @Override
