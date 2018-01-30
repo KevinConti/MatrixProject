@@ -39,8 +39,17 @@ public class Matrix {
         double[][] table = new double[1][2];
         table[0][0] = x;
         table[0][1] = y;
-        
+
         return new Matrix(table);
+    }
+
+    public static Matrix[] parseVectors(Vector[] vectors){
+        Matrix[] convertedMatrices = new Matrix[vectors.length];
+        for (int i = 0; i < vectors.length; i++){
+            convertedMatrices[i] = Matrix.parseVector(vectors[i]);
+        }
+
+        return convertedMatrices;
     }
 
     @Override

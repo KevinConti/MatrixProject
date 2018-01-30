@@ -85,4 +85,38 @@ public class MatrixTest {
         assertArrayEquals(testMatrixThree.getMatrix(), correctMatrixThree.getMatrix());
         assertArrayEquals(testMatrixFour.getMatrix(), correctMatrixFour.getMatrix());
     }
+
+    @Test
+    public void whenParseVectorsIsCalledTheAppropriateMatricesareReturned(){
+        Vector testVectorOne = new Vector(2.0, 6.0);
+        Vector testVectorTwo = new Vector(3.0, 4.0);
+        Vector testVectorThree = new Vector(3.0, 8.0);
+        Vector testVectorFour = new Vector(4.0, 6.0);
+
+        Vector[] vectors = new Vector[4];
+        vectors[0] = testVectorOne;
+        vectors[1] = testVectorTwo;
+        vectors[2] = testVectorThree;
+        vectors[3] = testVectorFour;
+
+        Matrix correctMatrixOne = new Matrix(new double[][]{
+                {2.0, 6.0}
+        });
+        Matrix correctMatrixTwo = new Matrix(new double[][]{
+                {3.0, 4.0}
+        });
+        Matrix correctMatrixThree = new Matrix(new double[][]{
+                {3.0, 8.0}
+        });
+        Matrix correctMatrixFour = new Matrix(new double[][]{
+                {4.0, 6.0}
+        });
+
+        Matrix[] testMatrices = Matrix.parseVectors(vectors);
+
+        assertArrayEquals(testMatrices[0].getMatrix(), correctMatrixOne.getMatrix());
+        assertArrayEquals(testMatrices[1].getMatrix(), correctMatrixTwo.getMatrix());
+        assertArrayEquals(testMatrices[2].getMatrix(), correctMatrixThree.getMatrix());
+        assertArrayEquals(testMatrices[3].getMatrix(), correctMatrixFour.getMatrix());
+    }
 }
