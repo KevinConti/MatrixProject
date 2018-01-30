@@ -25,6 +25,22 @@ public class Vector {
         return new Vector(xMean, yMean);
     }
 
+    public static Vector subtract(Vector minuend, Vector subtrahend){
+        double differenceX = minuend.getX() - subtrahend.getX();
+        double differenceY = minuend.getY() - subtrahend.getY();
+        return new Vector(differenceX, differenceY);
+    }
+
+    //The below method subtracts all the vectors in the vector array by the vector called "subtrahend". Useful for subtracting the mean
+    public static Vector[] subtract(Vector[] minuends, Vector subtrahend){
+        Vector[] subtractedVectors = new Vector[minuends.length];
+        for(int i = 0; i < minuends.length; i++){
+            subtractedVectors[i] = Vector.subtract(minuends[i], subtrahend);
+        }
+        
+        return subtractedVectors;
+    }
+
     public Vector(double x, double y) {
         this.x = x;
         this.y = y;

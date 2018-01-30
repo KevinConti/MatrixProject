@@ -51,4 +51,43 @@ public class VectorTest {
         assertEquals(meanVector.getX(), actualXMean, 0);
         assertEquals(meanVector.getY(), actualYMean, 0);
     }
+
+    @Test
+    public void whenSubtractIsCalledWithTwoVectorsAsParamsThenTheTwoVectorsAreSubtractedFromEachOther(){
+        Vector testOne = new Vector(2.0, 6.0);
+        Vector testTwo = new Vector(3.0, 6.0);
+
+        Vector result = Vector.subtract(testOne, testTwo);
+        assertEquals(result.getX(), -1.0, 0);
+        assertEquals(result.getY(), 0, 0);
+    }
+
+    @Test
+    public void whenSubtractIsCalledWithAnArrayOfVectorsAndASingleVectorAsParamsThenEachVectorInArrayIsSubtractedByTheSingleVector(){
+        Vector[] vectors = initializeTestVectors();
+        Vector subtrahend = new Vector(3.0, 6.0);
+        Vector[] subtractedVectors = Vector.subtract(vectors, subtrahend);
+
+        Vector[] correctVectors = new Vector[4];
+        correctVectors[0] = new Vector(-1.0, 0.0);
+        correctVectors[1] = new Vector(0.0, -2.0);
+        correctVectors[2] = new Vector(0.0, 2.0);
+        correctVectors[3] = new Vector(1.0, 0.0);
+
+        for (int i = 0; i < subtractedVectors.length; i++){
+            assertEquals(subtractedVectors[i].getX(), correctVectors[i].getX(), 0);
+            assertEquals(subtractedVectors[i].getY(), correctVectors[i].getY(), 0);
+        }
+    }
+
+    private Vector[] initializeTestVectors(){
+        Vector[] vectors = new Vector[4];
+        vectors[0] = new Vector(2.0, 6.0);
+        vectors[1] = new Vector(3.0, 4.0);
+        vectors[2] = new Vector(3.0, 8.0);
+        vectors[3] = new Vector(4.0, 6.0);
+
+        return vectors;
+
+    }
 }
