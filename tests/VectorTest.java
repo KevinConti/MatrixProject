@@ -40,14 +40,14 @@ public class VectorTest {
         System.out.println("X Mean: "+ actualXMean);
         System.out.println("Y Mean: "+ actualYMean);
 
-        ArrayList<Vector> vectors = new ArrayList<Vector>();
+        Vector[] vectors = new Vector[numOfTestValues];
 
         for(int i = 0; i < numOfTestValues; i++){
             Vector myVector = new Vector(xValues[i], yValues[i]);
-            vectors.add(myVector);
+            vectors[i] = myVector;
         }
 
-        Vector meanVector = Vector.add(vectors);
+        Vector meanVector = Vector.mean(vectors);
         assertEquals(meanVector.getX(), actualXMean, 0);
         assertEquals(meanVector.getY(), actualYMean, 0);
     }
