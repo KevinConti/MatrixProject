@@ -4,8 +4,7 @@ public class Vector {
     private double x;
     private double y;
 
-    //Returns a Vector with x and y values which are the mean of the ArrayList of Vectors sent in params
-    //TODO refactor to take a 2d array
+    //Returns a Vector with x and y values which are the mean of the array of Vectors sent in params
     public static Vector mean(Vector[] vectors){
 
         double xSum = 0.0;

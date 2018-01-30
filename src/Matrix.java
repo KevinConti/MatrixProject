@@ -31,6 +31,13 @@ public class Matrix {
         return new Matrix(addedMatrixArray);
     }
 
+    public static Matrix parseVector(Vector vector){
+        return new Matrix(new double[][]{
+                {},
+                {}
+        });
+    }
+
     @Override
     public String toString() {
         StringBuilder fullArray = new StringBuilder();
