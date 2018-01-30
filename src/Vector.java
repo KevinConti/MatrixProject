@@ -37,7 +37,7 @@ public class Vector {
         for(int i = 0; i < minuends.length; i++){
             subtractedVectors[i] = Vector.subtract(minuends[i], subtrahend);
         }
-        
+
         return subtractedVectors;
     }
 

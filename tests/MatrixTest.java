@@ -119,4 +119,59 @@ public class MatrixTest {
         assertArrayEquals(testMatrices[2].getMatrix(), correctMatrixThree.getMatrix());
         assertArrayEquals(testMatrices[3].getMatrix(), correctMatrixFour.getMatrix());
     }
+
+    @Test
+    public void whenToCovarianceIsCalledThenASingleMatrixIsReturned(){
+        Vector[] vectors = new Vector[2];
+        vectors[0] = new Vector(2.0, 6.0);
+        vectors[1] = new Vector(3.0, 4.0);
+
+        Matrix covarianceMatrix = Matrix.toCovariance(vectors);
+        assertNotNull(covarianceMatrix);
+    }
+
+    @Test
+    public void whenInvertMatrixIsCalledTheReturnedMatrixIsInverted(){
+        double[][] table = new double[][]{
+                {1.0,2.0}
+        };
+        Matrix myMatrix = new Matrix(table);
+        Matrix invertedMatrix = Matrix.inverse(myMatrix);
+        assertEquals(invertedMatrix.getMatrix()[0][0], 1.0, 0);
+        assertEquals(invertedMatrix.getMatrix()[1][0], 2.0, 0);
+    }
+
+    @Test
+    public void whenMultiplicationIsCalledTheMatrixIsCorrectlyMultiplied(){
+        Matrix[] matrices = initializeTestMatrices();
+        Matrix toMultiply = new Matrix(new double[][]{{-1.0},{0.0}});
+        try {
+            Matrix multipliedMatrix = Matrix.multiply(toMultiply, matrices[0]);
+            System.out.println(multipliedMatrix);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private Matrix[] initializeTestMatrices(){
+        Matrix[] matrices = new Matrix[4];
+        double[][] tableOne = new double[][]{
+                {-1.0, 0.0}
+        };
+        double[][] tableTwo = new double[][]{
+                {0.0, -2.0}
+        };
+        double[][] tableThree = new double[][]{
+                {0.0, 2.0}
+        };
+        double[][] tableFour = new double[][]{
+                {1.0, 0.0}
+        };
+        matrices[0] = new Matrix(tableOne);
+        matrices[1] = new Matrix(tableTwo);
+        matrices[2] = new Matrix(tableThree);
+        matrices[3] = new Matrix(tableFour);
+
+        return matrices;
+    }
 }
