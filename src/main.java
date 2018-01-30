@@ -5,6 +5,9 @@ public class main {
         InputParser ip = new InputParser();
         String filepath = "data/data.txt";
         Vector[][] vectors = ip.convertFile(filepath);
-        System.out.println(vectors[1].length);
+
+        for (Vector vector : vectors[0]){
+            System.out.println(vector);
+        }
     }
 }
