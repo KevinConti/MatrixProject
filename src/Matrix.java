@@ -69,15 +69,10 @@ public class Matrix {
         Matrix[] matrices = Matrix.parseVectors(subtractedVectors);
         //multiply by inverses
         Matrix[] twoByTwoMatrices = multiplyByInverse(matrices);
-        System.out.println("The following are the two-by-two matrices, after multiplying by inverse:");
-        System.out.println(Arrays.toString(twoByTwoMatrices));
-        System.out.println("");
         //Calculate matrix mean
         Matrix matrixMean = matrixMean(twoByTwoMatrices);
-        //return answer
-
-
-        return matrices[0];
+        //return answer]
+        return matrixMean;
     }
 
     private static Matrix[] multiplyByInverse(Matrix[] matrices){
@@ -165,7 +160,7 @@ public class Matrix {
             e.printStackTrace();
             System.out.println("Some error in matrixMean method");
         }
-        
+
         return matrixMean;
     }
 

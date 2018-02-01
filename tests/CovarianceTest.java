@@ -1,6 +1,12 @@
-public class main {
-    public static void main(String[] args){
-        Vector[][] vectors = initializeVectorsFromFile("data/data.txt");
+import org.junit.Test;
+import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+public class CovarianceTest {
+    @Test
+    public void givenSampleDataTheToCovarianceMethodReturnsTheProperResult(){
+        Vector[][] vectors = initializeVectorsFromFile("data/fake_data.txt");
         Matrix classOneCovariance = Matrix.toCovariance(vectors[0]);
         System.out.println("");
         System.out.println("Class One Covariance:");
@@ -11,7 +17,7 @@ public class main {
         System.out.println(classTwoCovariance);
     }
 
-    private static Vector[][] initializeVectorsFromFile(String filepath){
+    private Vector[][] initializeVectorsFromFile(String filepath) {
         InputParser ip = new InputParser();
         return ip.convertFile(filepath);
     }

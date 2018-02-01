@@ -145,12 +145,13 @@ public class MatrixTest {
     public void whenMultiplicationIsCalledTheMatrixIsCorrectlyMultiplied(){
         Matrix[] matrices = initializeTestMatrices();
         Matrix toMultiply = new Matrix(new double[][]{{-1.0},{0.0}});
+        Matrix multipliedMatrix;
         try {
-            Matrix multipliedMatrix = Matrix.multiply(toMultiply, matrices[0]);
-            System.out.println(multipliedMatrix);
+            multipliedMatrix = Matrix.multiply(toMultiply, matrices[0]);
         } catch (Exception e){
             e.printStackTrace();
         }
+
     }
 
     @Test
