@@ -153,6 +153,47 @@ public class MatrixTest {
         }
     }
 
+    @Test
+    public void testDivideByScalarDestructive(){
+        Matrix[] matrices = initializeTestMatrices();
+
+        //Initialize correct tables for assertions. Assumes division by 2.0
+        double[][] tableOne = new double[][]{
+                {-0.5, 0.0}
+        };
+        double[][] tableTwo = new double[][]{
+                {0.0, -1.0}
+        };
+        double[][] tableThree = new double[][]{
+                {0.0, 1.0}
+        };
+        double[][] tableFour = new double[][]{
+                {0.5, 0.0}
+        };
+
+        for(Matrix matrix: matrices){
+            Matrix.divideByScalarDestructive(matrix, 2.0);
+        }
+        assertEquals(tableOne[0][0], matrices[0].getMatrix()[0][0],0);
+        assertEquals(tableOne[0][1], matrices[0].getMatrix()[0][1],0);
+        assertEquals(tableTwo[0][0], matrices[1].getMatrix()[0][0],0);
+        assertEquals(tableTwo[0][1], matrices[1].getMatrix()[0][1],0);
+        assertEquals(tableThree[0][1], matrices[2].getMatrix()[0][1],0);
+        assertEquals(tableThree[0][1], matrices[2].getMatrix()[0][1],0);
+        assertEquals(tableFour[0][0], matrices[3].getMatrix()[0][0],0);
+        assertEquals(tableFour[0][1], matrices[3].getMatrix()[0][1],0);
+
+
+    }
+
+    public void testMatrixMean(){
+        Matrix[] matrices = initializeTestMatrices();
+        Matrix matrixMean = Matrix.matrixMean(matrices);
+        double[] arrayValue = {0.0,0.0};
+        assertEquals(arrayValue[0], matrixMean.getMatrix()[0][0], 0);
+        assertEquals(arrayValue[1], matrixMean.getMatrix()[0][1], 0);
+    }
+
     private Matrix[] initializeTestMatrices(){
         Matrix[] matrices = new Matrix[4];
         double[][] tableOne = new double[][]{

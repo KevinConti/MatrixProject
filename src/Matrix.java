@@ -35,6 +35,19 @@ public class Matrix {
         return new Matrix(addedMatrixArray);
     }
 
+    //Warning, this is a destructive method.
+    public static void divideByScalarDestructive(Matrix matrix, double scalar){
+        //enumerate through each entry in matrix table, divide by the scalar and set that new value into the matrix
+        int numRows = matrix.getMatrix().length;
+        int numColumns = matrix.getMatrix()[0].length;
+        for (int i = 0; i < numRows; i++){
+            for (int j = 0; j < numColumns; j++){
+                double matrixValue = matrix.getMatrix()[i][j];
+                matrix.setMatrix(i, j, matrixValue/scalar);
+            }
+        }
+    }
+
     public static Matrix parseVector(Vector vector){
 
         double x = vector.getX();
@@ -56,8 +69,11 @@ public class Matrix {
         Matrix[] matrices = Matrix.parseVectors(subtractedVectors);
         //multiply by inverses
         Matrix[] twoByTwoMatrices = multiplyByInverse(matrices);
+        System.out.println("The following are the two-by-two matrices, after multiplying by inverse:");
         System.out.println(Arrays.toString(twoByTwoMatrices));
+        System.out.println("");
         //Calculate matrix mean
+        Matrix matrixMean = matrixMean(twoByTwoMatrices);
         //return answer
 
 
@@ -132,6 +148,25 @@ public class Matrix {
             throw new Exception("Matrices cannot be multiplied");
         }
         return multipliedMatrix;
+    }
+
+    //WARNING: This method requires that matrix sizes are uniform in the given array
+    public static Matrix matrixMean(Matrix[] matrixArray){
+        int numOfRowsInMatrices = matrixArray[0].getMatrix().length;
+        int numOfColumnsInMatrices = matrixArray[0].getMatrix()[0].length;
+        Matrix matrixMean = new Matrix(new double[numOfRowsInMatrices][numOfColumnsInMatrices]);
+        try {
+            int i;
+            for (i = 0; i < matrixArray.length; i++){
+                matrixMean = Matrix.add(matrixMean, matrixArray[i]);
+            }
+            Matrix.divideByScalarDestructive(matrixMean, i);
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Some error in matrixMean method");
+        }
+        
+        return matrixMean;
     }
 
     public static Matrix[] parseVectors(Vector[] vectors){
