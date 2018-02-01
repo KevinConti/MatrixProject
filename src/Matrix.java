@@ -62,15 +62,27 @@ public class Matrix {
 
     public static Matrix toCovariance(Vector[] vectors){
         //calculate mean of vectors
+        System.out.println("");
         Vector meanVector = Vector.mean(vectors);
+        System.out.println("Mean Vector:");
+        System.out.println(meanVector);
         //Subtract mean
         Vector[] subtractedVectors = Vector.subtract(vectors, meanVector);
         //convert to matrices
         Matrix[] matrices = Matrix.parseVectors(subtractedVectors);
+        System.out.println("");
+        System.out.println("Matrices after subtracting mean");
+        System.out.println(Arrays.toString(matrices));
         //multiply by inverses
+        System.out.println("");
         Matrix[] twoByTwoMatrices = multiplyByInverse(matrices);
+        System.out.println("After multiplying by inverse");
+        System.out.println(Arrays.toString(twoByTwoMatrices));
         //Calculate matrix mean
+        System.out.println("");
+        System.out.println("Matrix mean:");
         Matrix matrixMean = matrixMean(twoByTwoMatrices);
+        System.out.println(matrixMean);
         //return answer]
         return matrixMean;
     }
