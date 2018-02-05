@@ -172,8 +172,6 @@ public class Matrix {
                     }
                     else {
                         //Last columns will be coefficientMatrix's value
-                        System.out.println("Square matrix number of columns:" + squareMatrix.numColumns());
-                        System.out.println("j = " + j);
                         augmentedMatrix.setMatrix(i,j, coefficientMatrix.getValueAt(i, j - squareMatrix.numColumns()));
                     }
 

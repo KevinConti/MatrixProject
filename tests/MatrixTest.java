@@ -297,6 +297,24 @@ public class MatrixTest {
         //test matrix params
         assertEquals(6, augmentedMatrix.numColumns(), 0);
         assertEquals(3, augmentedMatrix.numRows(), 0);
+
+        try {
+            augmentedMatrix.inverse();
+        } catch (InversionException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(-3.0, augmentedMatrix.getValueAt(0,3),0);
+        assertEquals(-2.0, augmentedMatrix.getValueAt(0,4),0);
+        assertEquals(1.0, augmentedMatrix.getValueAt(0,5),0);
+
+        assertEquals(-4.0, augmentedMatrix.getValueAt(1,3),0);
+        assertEquals(-2.0, augmentedMatrix.getValueAt(1,4),0);
+        assertEquals(1.0, augmentedMatrix.getValueAt(1,5),0);
+
+        assertEquals(-2.0, augmentedMatrix.getValueAt(2,3),0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(2,4),0);
+        assertEquals(0.0, augmentedMatrix.getValueAt(2,5),0);
     }
 
     @Test
