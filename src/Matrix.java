@@ -9,6 +9,10 @@ public class Matrix {
         this.matrix = matrix;
     }
 
+    public Matrix(int numRows, int numColumns){
+        this.matrix = new double[numRows][numColumns];
+    }
+
     public double[][] getMatrix() {
         return matrix;
     }
@@ -36,7 +40,10 @@ public class Matrix {
     public int largestAbsoluteValueIndex(int currentColumn){
         int index = -1;
         double highestValue = 0.0;
-        for (int i = 0; i < this.numRows(); i++){
+        //i does not start at 0 as we do not check if the highest value is in a row we don't care about
+        //i is doing two things here, it marks the earliest index we need to check, and it refers to the
+        //total number of rows in the matrix
+        for (int i = currentColumn; i < this.numRows(); i++){
             double currentValue = Math.abs(this.getValueAt(i, currentColumn));
             if (currentValue > highestValue){
                 highestValue = currentValue;
@@ -44,6 +51,72 @@ public class Matrix {
             }
         }
         return index;
+    }
+
+    public void inverse() throws InversionException {
+        //'this' is an augmented coefficient matrix
+        for(int j = 0; j < this.numRows(); j++){
+            //2a: Find largest absolute value in column
+            int p = this.largestAbsoluteValueIndex(j);
+            //2b: Check for flag, exit if answer cannot be found
+            if (this.getValueAt(p,j) == 0.0){
+                throw new InversionException("No answer found");
+            }
+            //2c: Pivot if necessary
+            else if (p > j) {
+                System.out.println(Double.toString(this.getValueAt(p, j)) + " is greater than " + Double.toString(this.getValueAt(j, j)));
+                System.out.println("Pivoting");
+                this.setMatrix(this.pivot(p, j).getMatrix());
+            }
+            //2d: Divide row j by the pivot value
+            double scalar = this.getValueAt(j, j);
+            Matrix.divideByScalarDestructive(this, scalar, j);
+
+            //2e: For each i != j, do row reduction
+            Matrix tempMatrix = new Matrix(this.numRows(), this.numColumns());
+            for (int y = 0; y < this.numRows(); y++){
+                if (y == j){
+                    for (int x = 0; x < tempMatrix.numColumns(); x++){
+                        tempMatrix.setMatrix(y, x, this.getValueAt(y, x));
+                    }
+                }
+                else {
+                    for (int x = 0; x < this.numColumns(); x++){
+                        double cellValue = this.getValueAt(y, x) - this.getValueAt(y, j) * this.getValueAt(j, x);
+                        tempMatrix.setMatrix(y, x, cellValue);
+                    }
+                }
+            }
+            this.setMatrix(tempMatrix.getMatrix());
+        }
+    }
+
+    public Matrix pivot(int pivotIndex, int rowToPivotInto){
+        Matrix pivotedMatrix = new Matrix(this.numRows(), this.numColumns());
+        //p=1, j=0
+        for (int i = 0; i < pivotedMatrix.numRows(); i++){
+            for(int x = 0; x < pivotedMatrix.numColumns(); x++){
+                if(i == pivotIndex){
+                    //copy rowToPivotInto's values
+                    pivotedMatrix.setMatrix(i, x, this.getValueAt(rowToPivotInto, x));
+                } else if (i == rowToPivotInto){
+                    //copy pivotIndex row's values
+                    pivotedMatrix.setMatrix(i, x, this.getValueAt(pivotIndex, x));
+                } else {
+                    //Copy row
+                    pivotedMatrix.setMatrix(i, x, this.getValueAt(i, x));
+                }
+            }
+        }
+        return pivotedMatrix;
+    }
+
+    //Call this on a square (nxn) matrix and send the coefficient matrix as a parameter
+    public Matrix inverse(Matrix coefficientMatrix) throws Exception {
+        //Create augmented matrix
+        Matrix augmentedMatrix = Matrix.createAugmentedMatrix(this, coefficientMatrix);
+        augmentedMatrix.inverse();
+        return augmentedMatrix;
     }
 
     //Class Methods

@@ -3,6 +3,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class MatrixTest {
 
@@ -208,6 +209,107 @@ public class MatrixTest {
         assertEquals(-3.5, matrix.getValueAt(1,2), 0);
     }
 
+    @Test
+    public void testInverse(){
+        //Initialize test matrices
+        double[][] squareTable = new double[][]{
+                {1, -1, 0},
+                {-2, 2, -1},
+                {0, 1, -2}
+        };
+        double[][] coefficientTable = new double[][]{
+                {2},
+                {-1},
+                {6}
+        };
+        Matrix squareMatrix = new Matrix(squareTable);
+        Matrix coefficientMatrix = new Matrix(coefficientTable);
+        Matrix augmentedMatrix = null;
+        try {
+            augmentedMatrix = Matrix.createAugmentedMatrix(squareMatrix, coefficientMatrix);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        //test matrix params
+        assertEquals(4, augmentedMatrix.numColumns(), 0);
+        assertEquals(3, augmentedMatrix.numRows(), 0);
+
+        //Create answerMatrix
+        double[][]answerTable = new double[][]{
+                {1, 0, 0, 2},
+                {0, 1, 0, 0},
+                {0, 0, 1, -3}
+        };
+        Matrix answerMatrix = new Matrix(answerTable);
+
+        //Create inverseMatrices with both versions of the method
+        try {
+            augmentedMatrix.inverse();
+        } catch (InversionException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        Matrix secondInverseMatrix = null;
+        try {
+            secondInverseMatrix = squareMatrix.inverse(coefficientMatrix);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        //test matrix params
+        assertEquals(4, augmentedMatrix.numColumns(), 0);
+        assertEquals(3, augmentedMatrix.numRows(), 0);
+        //test equalities
+        for (int i = 0; i < answerMatrix.numRows(); i++){
+            for(int j = 0; j < answerMatrix.numColumns(); j++){
+                assertEquals(answerMatrix.getValueAt(i, j), augmentedMatrix.getValueAt(i, j), 0);
+                assertEquals(answerMatrix.getValueAt(i, j), secondInverseMatrix.getValueAt(i, j), 0);
+            }
+        }
+
+    }
+
+    @Test
+    public void testPivot(){
+        Matrix augmentedMatrix = createTestAugmentedMatrix();
+        augmentedMatrix = augmentedMatrix.pivot(1,0);
+
+        assertEquals(-2.0, augmentedMatrix.getValueAt(0,0), 0);
+        assertEquals(2.0, augmentedMatrix.getValueAt(0,1), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(0,2), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(0,3), 0);
+
+        assertEquals(1.0, augmentedMatrix.getValueAt(1,0), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(1,1), 0);
+        assertEquals(0.0, augmentedMatrix.getValueAt(1,2), 0);
+        assertEquals(2.0, augmentedMatrix.getValueAt(1,3), 0);
+
+        assertEquals(0.0, augmentedMatrix.getValueAt(2,0), 0);
+        assertEquals(1.0, augmentedMatrix.getValueAt(2,1), 0);
+        assertEquals(-2.0, augmentedMatrix.getValueAt(2,2), 0);
+        assertEquals(6.0, augmentedMatrix.getValueAt(2,3), 0);
+
+        augmentedMatrix = augmentedMatrix.pivot(2,0);
+
+        assertEquals(0.0, augmentedMatrix.getValueAt(0,0), 0);
+        assertEquals(1.0, augmentedMatrix.getValueAt(0,1), 0);
+        assertEquals(-2.0, augmentedMatrix.getValueAt(0,2), 0);
+        assertEquals(6.0, augmentedMatrix.getValueAt(0,3), 0);
+
+        assertEquals(1.0, augmentedMatrix.getValueAt(1,0), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(1,1), 0);
+        assertEquals(0.0, augmentedMatrix.getValueAt(1,2), 0);
+        assertEquals(2.0, augmentedMatrix.getValueAt(1,3), 0);
+
+        assertEquals(-2.0, augmentedMatrix.getValueAt(2,0), 0);
+        assertEquals(2.0, augmentedMatrix.getValueAt(2,1), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(2,2), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(2,3), 0);
+    }
+
+    @Test
     public void testMatrixMean(){
         Matrix[] matrices = initializeTestMatrices();
         Matrix matrixMean = Matrix.matrixMean(matrices);
@@ -218,25 +320,18 @@ public class MatrixTest {
 
     @Test
     public void testCreateAugmentedMatrix(){
-        double[][] tableOne = new double[][]{
-                {-1.0, 0.0},
-                {3.0, 4.0}
-        };
-        double[][] coefficientMatrixTable = new double[][]{
-                {3.5},
-                {7.0}
-        };
-        Matrix squareMatrix = new Matrix(tableOne);
-        Matrix coefficientMatrix = new Matrix(coefficientMatrixTable);
-        Matrix augmentedMatrix = null;
-        try {
-            augmentedMatrix = Matrix.createAugmentedMatrix(squareMatrix, coefficientMatrix);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        assertEquals(coefficientMatrixTable[0][0], augmentedMatrix.getMatrix()[0][2], 0);
-        assertEquals(coefficientMatrixTable[1][0], augmentedMatrix.getMatrix()[1][2], 0);
+        double[][] coefficientMatrixTable = new double[][]{
+                {2},
+                {-1},
+                {6}
+        };
+
+        Matrix augmentedMatrix = createTestAugmentedMatrix();
+
+        assertEquals(coefficientMatrixTable[0][0], augmentedMatrix.getMatrix()[0][3], 0);
+        assertEquals(coefficientMatrixTable[1][0], augmentedMatrix.getMatrix()[1][3], 0);
+        assertEquals(coefficientMatrixTable[2][0], augmentedMatrix.getMatrix()[2][3], 0);
     }
 
     @Test
@@ -273,5 +368,29 @@ public class MatrixTest {
         matrices[3] = new Matrix(tableFour);
 
         return matrices;
+    }
+
+    private Matrix createTestAugmentedMatrix(){
+        //Initialize test matrices
+        double[][] squareTable = new double[][]{
+                {1, -1, 0},
+                {-2, 2, -1},
+                {0, 1, -2}
+        };
+        double[][] coefficientTable = new double[][]{
+                {2},
+                {-1},
+                {6}
+        };
+        Matrix squareMatrix = new Matrix(squareTable);
+        Matrix coefficientMatrix = new Matrix(coefficientTable);
+        Matrix augmentedMatrix = null;
+        try {
+            augmentedMatrix = Matrix.createAugmentedMatrix(squareMatrix, coefficientMatrix);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+        return  augmentedMatrix;
     }
 }
