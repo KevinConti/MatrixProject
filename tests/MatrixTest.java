@@ -195,6 +195,29 @@ public class MatrixTest {
         assertEquals(arrayValue[1], matrixMean.getMatrix()[0][1], 0);
     }
 
+    @Test
+    public void testCreateAugmentedMatrix(){
+        double[][] tableOne = new double[][]{
+                {-1.0, 0.0},
+                {3.0, 4.0}
+        };
+        double[][] coefficientMatrixTable = new double[][]{
+                {3.5},
+                {7.0}
+        };
+        Matrix squareMatrix = new Matrix(tableOne);
+        Matrix coefficientMatrix = new Matrix(coefficientMatrixTable);
+        Matrix augmentedMatrix = null;
+        try {
+            augmentedMatrix = Matrix.createAugmentedMatrix(squareMatrix, coefficientMatrix);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(coefficientMatrixTable[0][0], augmentedMatrix.getMatrix()[0][2], 0);
+        assertEquals(coefficientMatrixTable[1][0], augmentedMatrix.getMatrix()[1][2], 0);
+    }
+
     private Matrix[] initializeTestMatrices(){
         Matrix[] matrices = new Matrix[4];
         double[][] tableOne = new double[][]{

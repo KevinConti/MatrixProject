@@ -12,12 +12,24 @@ public class Matrix {
         return matrix;
     }
 
+    public double getValueAt(int row, int column){
+        return matrix[row][column];
+    }
+
     public void setMatrix(double[][] matrix) {
         this.matrix = matrix;
     }
 
     public void setMatrix(int row, int column, double value){
         matrix[row][column] = value;
+    }
+
+    public int numColumns(){
+        return this.matrix[0].length;
+    }
+
+    public int numRows(){
+        return this.matrix.length;
     }
 
     //Class Methods
@@ -46,6 +58,35 @@ public class Matrix {
                 matrix.setMatrix(i, j, matrixValue/scalar);
             }
         }
+    }
+
+    public static Matrix createAugmentedMatrix(Matrix squareMatrix, Matrix coefficientMatrix) throws Exception {
+        //Determine what length the matrix will be / verify appropriate length
+        if (squareMatrix.numColumns() == squareMatrix.numRows() && squareMatrix.numRows() == coefficientMatrix.numRows()){
+            //create a new matrix with the appropriate size
+            Matrix augmentedMatrix = new Matrix(new double[squareMatrix.numRows()][squareMatrix.numColumns() + 1]);
+
+            //Set matrix values
+            //For each row:
+            for (int i = 0; i < augmentedMatrix.numRows(); i++){
+
+                for (int j = 0; j < augmentedMatrix.numColumns(); j++){
+                    //First n columns (where n = squareMatrix.numColumns) will be square matrix's values
+                    if (j < augmentedMatrix.numColumns() - 1){
+                        double value = squareMatrix.getValueAt(i,j);
+                        augmentedMatrix.setMatrix(i, j, value);
+                    }
+                    else {
+                        //Last column will be coefficientMatrix's value
+                        augmentedMatrix.setMatrix(i,j, coefficientMatrix.getValueAt(i, 0));
+                    }
+
+                }
+
+            }
+            return augmentedMatrix;
+        }
+        else throw new Exception("Input matrices not formatted properly");
     }
 
     public static Matrix parseVector(Vector vector){
