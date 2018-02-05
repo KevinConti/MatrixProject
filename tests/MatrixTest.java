@@ -183,8 +183,29 @@ public class MatrixTest {
         assertEquals(tableThree[0][1], matrices[2].getMatrix()[0][1],0);
         assertEquals(tableFour[0][0], matrices[3].getMatrix()[0][0],0);
         assertEquals(tableFour[0][1], matrices[3].getMatrix()[0][1],0);
+    }
 
+    @Test
+    public void testDivideByScalarDestructiveRows(){
+        double[][] table = new double[][]{
+                {2.0, 4.0, 6.0},
+                {3.0, 5.0, 7.0}
+        };
+        Matrix matrix = new Matrix(table);
+        Matrix.divideByScalarDestructive(matrix, 2.0, 0);
 
+        assertEquals(1.0, matrix.getValueAt(0,0), 0);
+        assertEquals(2.0, matrix.getValueAt(0,1), 0);
+        assertEquals(3.0, matrix.getValueAt(0,2), 0);
+        assertEquals(3.0, matrix.getValueAt(1,0), 0);
+        assertEquals(5.0, matrix.getValueAt(1,1), 0);
+        assertEquals(7.0, matrix.getValueAt(1,2), 0);
+
+        Matrix.divideByScalarDestructive(matrix, -2.0, 1);
+
+        assertEquals(-1.5, matrix.getValueAt(1,0), 0);
+        assertEquals(-2.5, matrix.getValueAt(1,1), 0);
+        assertEquals(-3.5, matrix.getValueAt(1,2), 0);
     }
 
     public void testMatrixMean(){
@@ -216,6 +237,20 @@ public class MatrixTest {
 
         assertEquals(coefficientMatrixTable[0][0], augmentedMatrix.getMatrix()[0][2], 0);
         assertEquals(coefficientMatrixTable[1][0], augmentedMatrix.getMatrix()[1][2], 0);
+    }
+
+    @Test
+    public void testLargestAbsoluteValue(){
+        Matrix[] matrices = initializeTestMatrices();
+        double[][] tableOne = new double[][]{
+                {-1.0, 0.0},
+                {5.0, -2.0},
+                {1.0, -7.0}
+        };
+        Matrix testMatrix = new Matrix(tableOne);
+        assertEquals(1, testMatrix.largestAbsoluteValueIndex(0), 0);
+        assertEquals(2, testMatrix.largestAbsoluteValueIndex(1), 0);
+
     }
 
     private Matrix[] initializeTestMatrices(){

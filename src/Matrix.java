@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.lang.Math;
 
 public class Matrix {
 
@@ -32,6 +33,19 @@ public class Matrix {
         return this.matrix.length;
     }
 
+    public int largestAbsoluteValueIndex(int currentColumn){
+        int index = -1;
+        double highestValue = 0.0;
+        for (int i = 0; i < this.numRows(); i++){
+            double currentValue = Math.abs(this.getValueAt(i, currentColumn));
+            if (currentValue > highestValue){
+                highestValue = currentValue;
+                index = i;
+            }
+        }
+        return index;
+    }
+
     //Class Methods
     public static Matrix add(Matrix matrixOne, Matrix matrixTwo){
         //Check if matrices are appropriately sized (both must be MxN, returns a MxN matrix
@@ -55,8 +69,17 @@ public class Matrix {
         for (int i = 0; i < numRows; i++){
             for (int j = 0; j < numColumns; j++){
                 double matrixValue = matrix.getMatrix()[i][j];
-                matrix.setMatrix(i, j, matrixValue/scalar);
+                matrix.setMatrix(i, j, matrixValue / scalar);
             }
+        }
+    }
+
+    //Warning, this is a destructive method.
+    //This method is used for Gauss-Jordan elimination
+    public static void divideByScalarDestructive(Matrix matrix, double scalar, int rowIndex){
+        for (int columnIndex = 0; columnIndex < matrix.numColumns(); columnIndex++){
+            double matrixValue = matrix.getValueAt(rowIndex, columnIndex);
+            matrix.setMatrix(rowIndex, columnIndex, matrixValue / scalar);
         }
     }
 
