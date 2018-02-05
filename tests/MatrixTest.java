@@ -136,9 +136,9 @@ public class MatrixTest {
                 {1.0,2.0}
         };
         Matrix myMatrix = new Matrix(table);
-        Matrix invertedMatrix = Matrix.inverse(myMatrix);
-        assertEquals(invertedMatrix.getMatrix()[0][0], 1.0, 0);
-        assertEquals(invertedMatrix.getMatrix()[1][0], 2.0, 0);
+        Matrix transposedMatrix = Matrix.transpose(myMatrix);
+        assertEquals(transposedMatrix.getMatrix()[0][0], 1.0, 0);
+        assertEquals(transposedMatrix.getMatrix()[1][0], 2.0, 0);
     }
 
     @Test

@@ -75,30 +75,30 @@ public class Matrix {
         System.out.println(Arrays.toString(matrices));
         //multiply by inverses
         System.out.println("");
-        Matrix[] twoByTwoMatrices = multiplyByInverse(matrices);
+        Matrix[] twoByTwoMatrices = multiplyByTranspose(matrices);
         System.out.println("After multiplying by inverse");
         System.out.println(Arrays.toString(twoByTwoMatrices));
         //Calculate matrix mean
         System.out.println("");
-        System.out.println("Matrix mean:");
+        System.out.println("Covariance Matrix:");
         Matrix matrixMean = matrixMean(twoByTwoMatrices);
         System.out.println(matrixMean);
         //return answer]
         return matrixMean;
     }
 
-    private static Matrix[] multiplyByInverse(Matrix[] matrices){
+    private static Matrix[] multiplyByTranspose(Matrix[] matrices){
         Matrix[] twoByTwoMatrices = new Matrix[matrices.length];
 
         //for each matrix in matrices:
         for (int i = 0; i < matrices.length; i++) {
             Matrix matrix = matrices[i];
             //Determine the inverse
-            Matrix inverseMatrix = Matrix.inverse(matrix);
+            Matrix transposedMatrix = Matrix.transpose(matrix);
             //Multiply the inverse times matrix
             try {
                 //Store two by two result in twoByTwoMatrices
-                Matrix twoByTwoMatrix = Matrix.multiply(inverseMatrix, matrix);
+                Matrix twoByTwoMatrix = Matrix.multiply(transposedMatrix, matrix);
                 twoByTwoMatrices[i] = twoByTwoMatrix;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -110,12 +110,12 @@ public class Matrix {
     }
 
     //NOTE: This method currently only works to invert a 1x2 matrix into a 2x1
-    public static Matrix inverse(Matrix matrix){
-        double[][] invertedTable = new double[2][1];
-        invertedTable[0][0] = matrix.getMatrix()[0][0];
-        invertedTable[1][0] = matrix.getMatrix()[0][1];
+    public static Matrix transpose(Matrix matrix){
+        double[][] transposedTable = new double[2][1];
+        transposedTable[0][0] = matrix.getMatrix()[0][0];
+        transposedTable[1][0] = matrix.getMatrix()[0][1];
 
-        return new Matrix(invertedTable);
+        return new Matrix(transposedTable);
     }
 
     public static Matrix multiply(Matrix matrixOne, Matrix matrixTwo) throws Exception {
