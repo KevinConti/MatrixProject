@@ -64,8 +64,6 @@ public class Matrix {
             }
             //2c: Pivot if necessary
             else if (p > j) {
-                System.out.println(Double.toString(this.getValueAt(p, j)) + " is greater than " + Double.toString(this.getValueAt(j, j)));
-                System.out.println("Pivoting");
                 this.setMatrix(this.pivot(p, j).getMatrix());
             }
             //2d: Divide row j by the pivot value
@@ -160,7 +158,7 @@ public class Matrix {
         //Determine what length the matrix will be / verify appropriate length
         if (squareMatrix.numColumns() == squareMatrix.numRows() && squareMatrix.numRows() == coefficientMatrix.numRows()){
             //create a new matrix with the appropriate size
-            Matrix augmentedMatrix = new Matrix(new double[squareMatrix.numRows()][squareMatrix.numColumns() + 1]);
+            Matrix augmentedMatrix = new Matrix(new double[squareMatrix.numRows()][squareMatrix.numColumns() + coefficientMatrix.numColumns()]);
 
             //Set matrix values
             //For each row:
@@ -168,13 +166,15 @@ public class Matrix {
 
                 for (int j = 0; j < augmentedMatrix.numColumns(); j++){
                     //First n columns (where n = squareMatrix.numColumns) will be square matrix's values
-                    if (j < augmentedMatrix.numColumns() - 1){
+                    if (j < squareMatrix.numColumns()){
                         double value = squareMatrix.getValueAt(i,j);
                         augmentedMatrix.setMatrix(i, j, value);
                     }
                     else {
-                        //Last column will be coefficientMatrix's value
-                        augmentedMatrix.setMatrix(i,j, coefficientMatrix.getValueAt(i, 0));
+                        //Last columns will be coefficientMatrix's value
+                        System.out.println("Square matrix number of columns:" + squareMatrix.numColumns());
+                        System.out.println("j = " + j);
+                        augmentedMatrix.setMatrix(i,j, coefficientMatrix.getValueAt(i, j - squareMatrix.numColumns()));
                     }
 
                 }

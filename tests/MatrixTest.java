@@ -272,6 +272,34 @@ public class MatrixTest {
     }
 
     @Test
+    public void testInverseWithIdentity(){
+        double[][] squareTable = new double[][]{
+                {1, -1, 0},
+                {-2, 2, -1},
+                {0, 1, -2}
+        };
+        double[][] inverseTable = new double[][]{
+                {1, 0, 0},
+                {0, 1, 0},
+                {0, 0, 1}
+        };
+
+        Matrix squareMatrix = new Matrix(squareTable);
+        Matrix inverseMatrix = new Matrix(inverseTable);
+        Matrix augmentedMatrix = null;
+        try {
+            augmentedMatrix = Matrix.createAugmentedMatrix(squareMatrix, inverseMatrix);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        //test matrix params
+        assertEquals(6, augmentedMatrix.numColumns(), 0);
+        assertEquals(3, augmentedMatrix.numRows(), 0);
+    }
+
+    @Test
     public void testPivot(){
         Matrix augmentedMatrix = createTestAugmentedMatrix();
         augmentedMatrix = augmentedMatrix.pivot(1,0);
