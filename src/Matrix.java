@@ -123,10 +123,6 @@ public class Matrix {
                 }
                 else {
                     for (int x = 0; x < gaussianMatrix.numColumns(); x++){
-                        double Ri = gaussianMatrix.getValueAt(y, x);
-                        double Cij = gaussianMatrix.getValueAt(y, j);
-                        double Cjj = gaussianMatrix.getValueAt(j, j);
-                        double Rj = gaussianMatrix.getValueAt(j, x);
                         double cellValue = gaussianMatrix.getValueAt(y, x) - gaussianMatrix.getValueAt(y, j) / gaussianMatrix.getValueAt(j, j) * gaussianMatrix.getValueAt(j,x);
                         tempMatrix.setMatrix(y, x, cellValue);
                     }
@@ -144,7 +140,10 @@ public class Matrix {
             }
         }
         //Negative 1 for delta
-        return diagonalValue * -1;
+        if(gaussianMatrix.numRows() % 2 != 0){
+            diagonalValue *= -1;
+        }
+        return diagonalValue;
     }
 
     public Matrix pivot(int pivotIndex, int rowToPivotInto){
@@ -176,6 +175,20 @@ public class Matrix {
     }
 
     //Class Methods
+    public static Matrix createIdentityMatrix(int numberOfRowsAndColumns){
+        Matrix identityMatrix = new Matrix(numberOfRowsAndColumns, numberOfRowsAndColumns);
+        for(int i = 0; i < identityMatrix.numRows(); i++){
+            for (int j = 0; j < identityMatrix.numColumns(); j++){
+                if (i == j){
+                    identityMatrix.setMatrix(i, j, 1.0);
+                } else {
+                    identityMatrix.setMatrix(i, j, 0.0);
+                }
+            }
+        }
+        return identityMatrix;
+    }
+
     public static Matrix add(Matrix matrixOne, Matrix matrixTwo){
         //Check if matrices are appropriately sized (both must be MxN, returns a MxN matrix
         //Add the two together, store the result in the a new matrix that is returned
@@ -263,19 +276,11 @@ public class Matrix {
         Vector[] subtractedVectors = Vector.subtract(vectors, meanVector);
         //convert to matrices
         Matrix[] matrices = Matrix.parseVectors(subtractedVectors);
-        System.out.println("");
-        System.out.println("Matrices after subtracting mean");
-        System.out.println(Arrays.toString(matrices));
         //multiply by inverses
         System.out.println("");
         Matrix[] twoByTwoMatrices = multiplyByTranspose(matrices);
-        System.out.println("After multiplying by inverse");
-        System.out.println(Arrays.toString(twoByTwoMatrices));
         //Calculate matrix mean
-        System.out.println("");
-        System.out.println("Covariance Matrix:");
         Matrix matrixMean = matrixMean(twoByTwoMatrices);
-        System.out.println(matrixMean);
         //return answer]
         return matrixMean;
     }

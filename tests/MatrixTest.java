@@ -318,7 +318,7 @@ public class MatrixTest {
     }
 
     @Test
-    public void testDetirminate(){
+    public void testDeterminate(){
         double[][] table = new double[][]{
                 {5, -2, 3},
                 {0, 7, -8},
