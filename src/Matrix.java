@@ -37,6 +37,16 @@ public class Matrix {
         return this.matrix.length;
     }
 
+    public Matrix copy(){
+        Matrix copy = new Matrix(this.numRows(), this.numColumns());
+        for (int rowIndex = 0; rowIndex < copy.numRows(); rowIndex++){
+            for (int columnIndex = 0; columnIndex < copy.numColumns(); columnIndex++){
+                copy.setMatrix(rowIndex,columnIndex, this.getValueAt(rowIndex, columnIndex));
+            }
+        }
+        return copy;
+    }
+
     public int largestAbsoluteValueIndex(int currentColumn){
         int index = -1;
         double highestValue = 0.0;
@@ -87,6 +97,54 @@ public class Matrix {
             }
             this.setMatrix(tempMatrix.getMatrix());
         }
+    }
+
+    public double determinate() throws InversionException {
+        Matrix gaussianMatrix = this.copy();
+        for(int j = 0; j < gaussianMatrix.numRows() - 1; j++){
+            //2a: Find largest absolute value in column
+            int p = gaussianMatrix.largestAbsoluteValueIndex(j);
+            //2b: Check for flag, exit if answer cannot be found
+            if (gaussianMatrix.getValueAt(p,j) == 0.0){
+                throw new InversionException("No answer found");
+            }
+            //2c: Pivot if necessary
+            else if (p > j) {
+                gaussianMatrix.setMatrix(gaussianMatrix.pivot(p, j).getMatrix());
+            }
+
+            //2e: For each i > j, do row reduction
+            Matrix tempMatrix = new Matrix(gaussianMatrix.numRows(), gaussianMatrix.numColumns());
+            for (int y = 0; y < gaussianMatrix.numRows(); y++){
+                if (y <= j){
+                    for (int x = 0; x < tempMatrix.numColumns(); x++){
+                        tempMatrix.setMatrix(y, x, gaussianMatrix.getValueAt(y, x));
+                    }
+                }
+                else {
+                    for (int x = 0; x < gaussianMatrix.numColumns(); x++){
+                        double Ri = gaussianMatrix.getValueAt(y, x);
+                        double Cij = gaussianMatrix.getValueAt(y, j);
+                        double Cjj = gaussianMatrix.getValueAt(j, j);
+                        double Rj = gaussianMatrix.getValueAt(j, x);
+                        double cellValue = gaussianMatrix.getValueAt(y, x) - gaussianMatrix.getValueAt(y, j) / gaussianMatrix.getValueAt(j, j) * gaussianMatrix.getValueAt(j,x);
+                        tempMatrix.setMatrix(y, x, cellValue);
+                    }
+                }
+            }
+            gaussianMatrix.setMatrix(tempMatrix.getMatrix());
+        }
+        //calculate along diagonal
+        double diagonalValue = 0.0;
+        for (int i= 0; i < gaussianMatrix.numColumns(); i++){
+            if (i == 0){
+                diagonalValue = gaussianMatrix.getValueAt(i, i);
+            } else {
+                diagonalValue *= gaussianMatrix.getValueAt(i, i);
+            }
+        }
+        //Negative 1 for delta
+        return diagonalValue * -1;
     }
 
     public Matrix pivot(int pivotIndex, int rowToPivotInto){

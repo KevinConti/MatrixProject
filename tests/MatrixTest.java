@@ -318,6 +318,37 @@ public class MatrixTest {
     }
 
     @Test
+    public void testDetirminate(){
+        double[][] table = new double[][]{
+                {5, -2, 3},
+                {0, 7, -8},
+                {4, 3, 1}
+        };
+        Matrix testMatrix = new Matrix(table);
+        double determinate = 0;
+        try {
+            determinate = testMatrix.determinate();
+        } catch (InversionException e) {
+            e.printStackTrace();
+        }
+        assertEquals(-135.0, determinate, 0);
+    }
+
+    @Test
+    public void testCopy(){
+        Matrix original = initializeTestMatrices()[0];
+        Matrix copy = original.copy();
+
+        //Test copy is correct values
+        assertEquals(original.getValueAt(0,0), copy.getValueAt(0,0),0);
+        assertEquals(original.getValueAt(0,1), copy.getValueAt(0,1),0);
+        //Test copy isn't a reference to original
+        copy.setMatrix(0,0, 10.5);
+        assertEquals(-1.0, original.getValueAt(0,0),0);
+        assertEquals(10.5, copy.getValueAt(0,0), 0);
+    }
+
+    @Test
     public void testPivot(){
         Matrix augmentedMatrix = createTestAugmentedMatrix();
         augmentedMatrix = augmentedMatrix.pivot(1,0);
