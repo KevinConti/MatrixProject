@@ -320,12 +320,13 @@ public class Matrix {
         Matrix multipliedMatrix;
 
         //Assuming a matrixOne is Mx*y, and matrixTwo is Mi*j, then they can be multiplied if y==i
+        //In other words, number of columns in matrixOne must be equal to the number of rows in matrixTwo
         if(matrixOne.numColumns() == matrixTwo.numRows()) {
             int numberOfMultiplicationsPerCell = matrixOne.numColumns();
 
             //Assuming a matrixOne is Mx*y, and matrixTwo is Mi*j, then the resulting matrix will be Mx*j
-            int numberOfColumnsForAnswer = matrixOne.numRows();
-            int numberOfRowsForAnswer = matrixTwo.numColumns();
+            int numberOfColumnsForAnswer = matrixTwo.numColumns();
+            int numberOfRowsForAnswer = matrixOne.numRows();
             multipliedMatrix = new Matrix(new double[numberOfRowsForAnswer][numberOfColumnsForAnswer]);
 
             //Multiplication begins. Formula is answerMatrix[x][y] = sum(matrixOne[x][i] + matrixTwo[i][y])

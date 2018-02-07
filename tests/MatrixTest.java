@@ -151,6 +151,23 @@ public class MatrixTest {
             multipliedMatrix = Matrix.multiply(toMultiply, matrices[0]);
         } catch (Exception e){
             e.printStackTrace();
+            fail();
+        }
+
+        //Multiply a 1x2 * 2x1 matrix and return a 2x2 matrix
+        Matrix oneByTwo = new Matrix(1,2);
+        oneByTwo.setMatrix(0,0, 5);
+        oneByTwo.setMatrix(0,1,10);
+        Matrix twoByTwo = new Matrix(2,2);
+        for(int i = 0; i < twoByTwo.numRows(); i++){
+            twoByTwo.setMatrix(i, 0, i);
+            twoByTwo.setMatrix(i, 1, i+1);
+        }
+        try {
+            Matrix.multiply(oneByTwo, twoByTwo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
         }
 
     }
