@@ -19,6 +19,10 @@ public class main {
         Matrix classOneInverse = classOneCovariance.copy();
         try {
             classOneInverse.inverse(identityMatrix);
+            //Remove first two columns to remove identity matrix
+            for(int i = 0; i < identityMatrix.numColumns(); i++) {
+                classOneInverse.removeFirstColumn();
+            }
             System.out.println(classOneInverse);
         } catch (Exception e) {
             e.printStackTrace();
@@ -28,6 +32,10 @@ public class main {
         Matrix classTwoInverse = classTwoCovariance.copy();
         try {
             classTwoInverse.inverse(identityMatrix);
+            //Remove first two columns to remove identity matrix
+            for(int i = 0; i < identityMatrix.numColumns(); i++) {
+                classTwoInverse.removeFirstColumn();
+            }
             System.out.println(classTwoInverse);
         } catch (Exception e) {
             e.printStackTrace();

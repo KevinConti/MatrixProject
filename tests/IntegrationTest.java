@@ -54,12 +54,33 @@ public class IntegrationTest {
             e.printStackTrace();
             fail();
         }
+        assertEquals(1.0, classOneDeterminate, 0);
         System.out.println("Class Two determinant");
         double classTwoDeterminate = 0.0;
         try {
             classTwoDeterminate = classTwoCovariance.determinate();
             System.out.println(Double.toString(classTwoDeterminate));
         } catch (InversionException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assertEquals(4.0, classTwoDeterminate, 0);
+
+        //Test discriminants
+        Vector classOneMeanVector = Vector.mean(vectors[0]);
+        Discriminate classOneDiscriminant = new Discriminate(classOneMeanVector, classOneInverse, classOneDeterminate);
+        Vector classTwoMeanVector = Vector.mean(vectors[1]);
+        Discriminate classTwoDiscriminant = new Discriminate(classTwoMeanVector, classTwoInverse, classTwoDeterminate);
+
+        try {
+            assertEquals(-18.0, classOneDiscriminant.classify(0,0), 0);
+            assertEquals(-15.25, classOneDiscriminant.classify(0,1),0);
+            assertEquals(-13.0, classOneDiscriminant.classify(1,0),0);
+
+            assertEquals(-3.943147, classTwoDiscriminant.classify(0,0),.0001);
+            assertEquals(-5.19314, classTwoDiscriminant.classify(0,1),.0001);
+            assertEquals(-2.693147, classTwoDiscriminant.classify(1,0),.0001);
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }
