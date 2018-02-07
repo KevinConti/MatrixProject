@@ -43,25 +43,27 @@ public class main {
             e.printStackTrace();
         }
 
-//        Vector classOneMeanVector = Vector.mean(vectors[0]);
-//        Matrix classOneInverse = classOneCovariance.copy();
-//        try {
-//            classOneCovariance.inverse();
-//        } catch (InversionException e) {
-//            e.printStackTrace();
-//        }
-//        Discriminate classOneDiscriminate = new Discriminate();
-//        try {
-//            classOneDiscriminate = new Discriminate(classOneMeanVector, classOneInverse, classOneCovariance.copy().determinate());
-//        } catch (InversionException e) {
-//            e.printStackTrace();
-//
-//        }
-//        try {
-//            classOneDiscriminate.classify(2.125675004181818, 3.1825644208181822);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Vector classOneMeanVector = Vector.mean(vectors[0]);
+        Matrix classOneInverse = classOneCovariance.copy();
+        try {
+            classOneCovariance.inverse();
+        } catch (InversionException e) {
+            e.printStackTrace();
+        }
+        Discriminate classOneDiscriminate = new Discriminate();
+        try {
+            classOneDiscriminate = new Discriminate(classOneMeanVector, classOneInverse, classOneCovariance.copy().determinate());
+        } catch (InversionException e) {
+            e.printStackTrace();
+
+        }
+        try {
+            double result = classOneDiscriminate.classify(3.432943751, 2.067419696);
+            System.out.println("\nClass Two Descriminate:");
+            System.out.println(Double.toString(result));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
