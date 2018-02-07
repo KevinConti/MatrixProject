@@ -285,7 +285,38 @@ public class MatrixTest {
                 assertEquals(answerMatrix.getValueAt(i, j), secondInverseMatrix.getValueAt(i, j), 0);
             }
         }
+    }
 
+    @Test
+    public void testRemoveFirstColumn(){
+        Matrix[] matrices = initializeTestMatrices();
+        double[][] answerTable = new double[][]{
+                {0.0},
+                {-2.0},
+                {2.0},
+                {0.0}
+        };
+        for (int i = 0; i < answerTable.length; i++){
+            matrices[i].removeFirstColumn();
+
+            assertEquals(answerTable[i][0], matrices[i].getValueAt(0,0), 0);
+        }
+
+        //Test a larger matrix
+        Matrix augmented = createTestAugmentedMatrix();
+        //Remove three columns so just the coefficients remain
+        augmented.removeFirstColumn();
+        augmented.removeFirstColumn();
+        augmented.removeFirstColumn();
+        //Answers should be 2, -1, 6
+        answerTable = new double[][]{
+                {2.0},
+                {-1.0},
+                {6.0}
+        };
+        for(int i = 0; i < answerTable.length; i++){
+            assertEquals(answerTable[i][0], augmented.getValueAt(i,0), 0);
+        }
     }
 
     @Test

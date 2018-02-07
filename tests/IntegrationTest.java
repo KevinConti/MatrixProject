@@ -2,6 +2,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class IntegrationTest {
     @Test
@@ -20,31 +21,47 @@ public class IntegrationTest {
         Matrix identityMatrix = Matrix.createIdentityMatrix(classOneCovariance.numRows());
         System.out.println("");
         System.out.println("Class one inverse matrix:");
+        Matrix classOneInverse = classOneCovariance.copy();
         try {
-            System.out.println(classOneCovariance.copy().inverse(identityMatrix));
+            classOneInverse.inverse(identityMatrix);
+            classOneInverse.removeFirstColumn();
+            classOneInverse.removeFirstColumn();
+            System.out.println(classOneInverse);
         } catch (Exception e) {
             e.printStackTrace();
+            fail();
         }
         System.out.println("");
         System.out.println("Class two inverse matrix:");
+        Matrix classTwoInverse = classTwoCovariance.copy();
         try {
-            System.out.println(classTwoCovariance.copy().inverse(identityMatrix));
+            classTwoInverse.inverse(identityMatrix);
+            //Remove first two columns to eliminate identity matrix
+            classTwoInverse.removeFirstColumn();
+            classTwoInverse.removeFirstColumn();
+            System.out.println(classTwoInverse);
         } catch (Exception e) {
             e.printStackTrace();
+            fail();
         }
-
         //Next, find determinants
         System.out.println("Class one determinant");
+        double classOneDeterminate = 0.0;
         try {
-            System.out.println(Double.toString(classOneCovariance.determinate()));
+            classOneDeterminate = classOneCovariance.determinate();
+            System.out.println(Double.toString(classOneDeterminate));
         } catch (InversionException e) {
             e.printStackTrace();
+            fail();
         }
         System.out.println("Class Two determinant");
+        double classTwoDeterminate = 0.0;
         try {
-            System.out.println(Double.toString(classTwoCovariance.determinate()));
+            classTwoDeterminate = classTwoCovariance.determinate();
+            System.out.println(Double.toString(classTwoDeterminate));
         } catch (InversionException e) {
             e.printStackTrace();
+            fail();
         }
 
     }

@@ -47,6 +47,18 @@ public class Matrix {
         return copy;
     }
 
+    public void removeFirstColumn(){
+        Matrix tempMatrix = new Matrix(this.numRows(), this.numColumns() - 1);
+        for (int i = 0; i < this.numRows(); i++){
+            for (int x = 0; x < this.numColumns(); x++){
+                if (x != 0){
+                    tempMatrix.setMatrix(i,x-1, this.getValueAt(i,x));
+                }
+            }
+        }
+        this.setMatrix(tempMatrix.getMatrix());
+    }
+
     public int largestAbsoluteValueIndex(int currentColumn){
         int index = -1;
         double highestValue = 0.0;
