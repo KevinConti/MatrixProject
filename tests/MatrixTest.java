@@ -132,14 +132,31 @@ public class MatrixTest {
     }
 
     @Test
-    public void whenInvertMatrixIsCalledTheReturnedMatrixIsInverted(){
+    public void testTranspose(){
         double[][] table = new double[][]{
                 {1.0,2.0}
         };
+        double[][] tableTwo = new double[][]{
+                {-2, 5, -1},
+                {5, -7, 8},
+                {6, -4, 3}
+        };
         Matrix myMatrix = new Matrix(table);
-        Matrix transposedMatrix = Matrix.transpose(myMatrix);
-        assertEquals(transposedMatrix.getMatrix()[0][0], 1.0, 0);
-        assertEquals(transposedMatrix.getMatrix()[1][0], 2.0, 0);
+        Matrix myMatrixTwo = new Matrix(tableTwo);
+        Matrix transposedMatrixOne = Matrix.transpose(myMatrix);
+        assertEquals(transposedMatrixOne.getMatrix()[0][0], 1.0, 0);
+        assertEquals(transposedMatrixOne.getMatrix()[1][0], 2.0, 0);
+
+        myMatrixTwo = Matrix.transpose(myMatrixTwo);
+        assertEquals(-2.0, myMatrixTwo.getValueAt(0,0), 0);
+        assertEquals(5.0, myMatrixTwo.getValueAt(0,1), 0);
+        assertEquals(6.0, myMatrixTwo.getValueAt(0,2), 0);
+        assertEquals(5.0, myMatrixTwo.getValueAt(1,0), 0);
+        assertEquals(-7.0, myMatrixTwo.getValueAt(1,1), 0);
+        assertEquals(-4.0, myMatrixTwo.getValueAt(1,2), 0);
+        assertEquals(-1.0, myMatrixTwo.getValueAt(2,0), 0);
+        assertEquals(8.0, myMatrixTwo.getValueAt(2,1), 0);
+        assertEquals(3.0, myMatrixTwo.getValueAt(2,2), 0);
     }
 
     @Test

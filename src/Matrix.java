@@ -331,13 +331,21 @@ public class Matrix {
         return twoByTwoMatrices;
     }
 
-    //NOTE: This method currently only works to invert a 1x2 matrix into a 2x1
-    public static Matrix transpose(Matrix matrix){
-        double[][] transposedTable = new double[2][1];
-        transposedTable[0][0] = matrix.getMatrix()[0][0];
-        transposedTable[1][0] = matrix.getMatrix()[0][1];
+    public static Matrix transpose(Matrix originalMatrix){
+        Matrix transposedMatrix = new Matrix(originalMatrix.numColumns(), originalMatrix.numRows());
+        for (int i = 0; i < transposedMatrix.numRows(); i++){
+            for (int j = 0; j < transposedMatrix.numColumns(); j++){
+                transposedMatrix.setMatrix(i, j, originalMatrix.getValueAt(j, i));
+            }
+        }
 
-        return new Matrix(transposedTable);
+        return transposedMatrix;
+
+//        old method that only worked on a 1x2 matrix
+//        double[][] transposedTable = new double[2][1];
+//        transposedTable[0][0] = matrix.getMatrix()[0][0];
+//        transposedTable[1][0] = matrix.getMatrix()[0][1];
+//        return new Matrix(transposedTable);
     }
 
     public static Matrix multiply(Matrix matrixOne, Matrix matrixTwo) throws Exception {
