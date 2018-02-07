@@ -16,15 +16,19 @@ public class main {
         Matrix identityMatrix = Matrix.createIdentityMatrix(classOneCovariance.numRows());
         System.out.println("");
         System.out.println("Class one inverse matrix:");
+        Matrix classOneInverse = classOneCovariance.copy();
         try {
-            System.out.println(classOneCovariance.copy().inverse(identityMatrix));
+            classOneInverse.inverse(identityMatrix);
+            System.out.println(classOneInverse);
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("");
         System.out.println("Class two inverse matrix:");
+        Matrix classTwoInverse = classTwoCovariance.copy();
         try {
-            System.out.println(classTwoCovariance.copy().inverse(identityMatrix));
+            classTwoInverse.inverse(identityMatrix);
+            System.out.println(classTwoInverse);
         } catch (Exception e) {
             e.printStackTrace();
         }

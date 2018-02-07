@@ -179,11 +179,11 @@ public class Matrix {
     }
 
     //Call this on a square (nxn) matrix and send the coefficient matrix as a parameter
-    public Matrix inverse(Matrix coefficientMatrix) throws Exception {
+    public void inverse(Matrix coefficientMatrix) throws Exception {
         //Create augmented matrix
         Matrix augmentedMatrix = Matrix.createAugmentedMatrix(this, coefficientMatrix);
         augmentedMatrix.inverse();
-        return augmentedMatrix;
+        this.setMatrix(augmentedMatrix.getMatrix());
     }
 
     //Class Methods

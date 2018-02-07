@@ -268,9 +268,9 @@ public class MatrixTest {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
-        Matrix secondInverseMatrix = null;
+        Matrix secondInverseMatrix = new Matrix(squareTable);
         try {
-            secondInverseMatrix = squareMatrix.inverse(coefficientMatrix);
+            secondInverseMatrix.inverse(coefficientMatrix);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());

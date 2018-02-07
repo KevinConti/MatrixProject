@@ -63,7 +63,6 @@ public class IntegrationTest {
             e.printStackTrace();
             fail();
         }
-
     }
 
     private Vector[][] initializeVectorsFromFile(String filepath) {
