@@ -97,14 +97,6 @@ public class Matrix {
             }
             this.setMatrix(tempMatrix.getMatrix());
         }
-        //The left hand side is the identity matrix, which we can partition out
-        Matrix noIdentity = new Matrix(this.numRows(), this.numColumns()/2);
-        for(int i = 0; i < noIdentity.numRows(); i++){
-            for (int j = 0; j < noIdentity.numColumns(); j++){
-                noIdentity.setMatrix(i,j,this.getValueAt(i,j+noIdentity.numColumns()));
-            }
-        }
-        this.setMatrix(noIdentity.getMatrix());
     }
 
     public double determinate() throws InversionException {

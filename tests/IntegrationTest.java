@@ -2,7 +2,6 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class IntegrationTest {
     @Test
@@ -47,30 +46,6 @@ public class IntegrationTest {
         } catch (InversionException e) {
             e.printStackTrace();
         }
-
-        Vector classOneMeanVector = new Vector(3,4);
-        Matrix classOneInverseMatrix = new Matrix(2,2);
-        double classOneDeterminate = 0.0;
-        try {
-            classOneInverseMatrix = classOneCovariance.copy().inverse(identityMatrix);
-            classOneDeterminate = classOneCovariance.copy().determinate();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
-        Discriminate classOnediscriminate = new Discriminate(classOneMeanVector, classOneInverseMatrix, classOneDeterminate);
-
-        Vector classTwoMeanVector = new Vector(3,0);
-        Matrix classTwoInverseMatrix = new Matrix(2,2);
-        double classTwoDeterminate = 0.0;
-        try {
-            classTwoInverseMatrix = classTwoCovariance.copy().inverse(identityMatrix);
-            classTwoDeterminate = classTwoCovariance.copy().determinate();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
-        Discriminate classTwodiscriminate = new Discriminate(classTwoMeanVector, classTwoInverseMatrix, classTwoDeterminate);
 
     }
 
