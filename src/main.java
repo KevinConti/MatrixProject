@@ -78,7 +78,8 @@ public class main {
     }
 
     private static void findMisclassifiedPoints(Vector[][] vectors, Discriminate[] discriminates) throws Exception {
-        ArrayList<Vector> misclassifiedVectors = new ArrayList<Vector>();
+        ArrayList<Vector> classOneMisclassifiedVectors = new ArrayList<>(); //Vectors that should be in class one
+        ArrayList<Vector> classTwoMisclassifiedVectors = new ArrayList<>(); //Vectors that should be in class two
         //Create Top line of table
         System.out.format("--------------------------------------------------------------%n");
         System.out.format("%20s%20s%20s%n", "Misclassified", "g1(x)", "g2(x)");
@@ -91,7 +92,7 @@ public class main {
                     double g2Value = discriminates[1].classify(vector.getX(), vector.getY());
                     if(g1Value >= g2Value) {} //Vector is correctly classified
                     else{
-                        misclassifiedVectors.add(vector);
+                        classOneMisclassifiedVectors.add(vector);
                         printTableLine(vector, g1Value, g2Value);
                     }
                 }
@@ -101,7 +102,7 @@ public class main {
                     double g2Value = discriminates[1].classify(vector.getX(), vector.getY());
                     if(g2Value >= g1Value) {} //Vector is correctly classified
                     else{
-                        misclassifiedVectors.add(vector);
+                        classTwoMisclassifiedVectors.add(vector);
                         printTableLine(vector, g1Value, g2Value);
                     }
                 }
@@ -111,7 +112,7 @@ public class main {
         System.out.format("--------------------------------------------------------------%n");
 
         //Create summary table
-        createSummaryTable(misclassifiedVectors);
+        createSummaryTable(classOneMisclassifiedVectors, classTwoMisclassifiedVectors);
     }
 
     private static void printTableLine(Vector vector, double g1Value, double g2Value){
@@ -119,7 +120,14 @@ public class main {
         System.out.format(format, vector.getX(), vector.getY(), g1Value, g2Value);
     }
 
-    private static void createSummaryTable(ArrayList<Vector> misclassifiedVectors){
+    private static void createSummaryTable(ArrayList<Vector> classOneErrors, ArrayList<Vector> classTwoErrors){
+        //Create beginning of table
+        System.out.format("--------------------------------------------------------------%n");
+        System.out.format("%20s%20s%20s%n", "", "Class 1", "Class 2");
+        System.out.format("--------------------------------------------------------------%n");
+        System.out.format("%-20s%15d%20d%n", "Correctly Identified: ", 110-classOneErrors.size(), 110-classTwoErrors.size());
+        System.out.format("%-17s%13d%20d%n", "Incorrectly Identified: ", classTwoErrors.size(), classOneErrors.size());
+        System.out.format("--------------------------------------------------------------%n");
 
     }
 
