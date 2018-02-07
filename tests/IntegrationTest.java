@@ -80,6 +80,19 @@ public class IntegrationTest {
             assertEquals(-3.943147, classTwoDiscriminant.classify(0,0),.0001);
             assertEquals(-5.19314, classTwoDiscriminant.classify(0,1),.0001);
             assertEquals(-2.693147, classTwoDiscriminant.classify(1,0),.0001);
+
+            //TODO: Remove these
+            //What happens when we send sample data?
+            try {
+                double one = classOneDiscriminant.classify(3,6);
+                double two = classTwoDiscriminant.classify(3,6);
+                System.out.println("Class One Discriminant calculates <2,6> as: "+Double.toString(one));
+                System.out.println("Class Two Discriminant calculates <2,6> as: "+Double.toString(two));
+//                System.out.println("Calculation from slides as: "+ Double.toString(0.1875*4 - 1.125 * 2 + 3.514));
+            } catch (Exception e){
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             fail();
