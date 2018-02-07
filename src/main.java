@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class main {
@@ -75,6 +78,12 @@ public class main {
             e.printStackTrace();
         }
 
+        //Estimate Boundary Contour (Problem 8)
+        try {
+            estimateBoundaryContour("data/out/boundaries.csv", discriminates);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void findMisclassifiedPoints(Vector[][] vectors, Discriminate[] discriminates) throws Exception {
@@ -128,7 +137,29 @@ public class main {
         System.out.format("%-20s%15d%20d%n", "Correctly Identified: ", 110-classOneErrors.size(), 110-classTwoErrors.size());
         System.out.format("%-17s%13d%20d%n", "Incorrectly Identified: ", classTwoErrors.size(), classOneErrors.size());
         System.out.format("--------------------------------------------------------------%n");
+    }
 
+    //This method computes the boundaries points in cartesian axes, and outputs them to a .csv file for external use
+    private static void estimateBoundaryContour(String outputFilePath, Discriminate[] discriminates) throws Exception {
+        final double SIGMA = 0.01;
+
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new FileWriter(outputFilePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        out.printf("boundaryX,boundaryY%n");
+        for(double x = -5.0; x < 4; x+= 0.01){
+            for(double y = -4.0; y<8.0; y+= 0.01){
+                double g1 = discriminates[0].classify(x,y);
+                double g2 = discriminates[1].classify(x,y);
+                if(Math.abs(g1 - g2) < SIGMA) {
+                    out.printf("%f,%f%n", x, y);
+                }
+            }
+        }
+        out.close();
     }
 
     private static Vector[][] initializeVectorsFromFile(String filepath){
