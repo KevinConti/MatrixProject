@@ -6,6 +6,7 @@ public class LinearSystems {
             solutionMatrix.inverse();
             System.out.println("Solution to the linear equations:");
             System.out.println(solutionMatrix);
+            System.out.println("");
         } catch (InversionException e) {
             e.printStackTrace();
         }
@@ -14,7 +15,9 @@ public class LinearSystems {
             Matrix determinantMatrix = linearMatrix.copy();
             determinantMatrix.removeLastColumn();
             determinant = determinantMatrix.determinate();
-            System.out.println("Determinant is: "+Double.toString(determinant));
+            System.out.println("Determinant is: ");
+            System.out.println(determinant);
+            System.out.println("");
         } catch (InversionException e) {
             e.printStackTrace();
         }
@@ -32,6 +35,7 @@ public class LinearSystems {
         }
         System.out.println("Inverse matrix: ");
         System.out.println(inverseMatrix);
+        System.out.println("");
 
         double inverseDeterminant = 0.0;
         try {
@@ -39,25 +43,30 @@ public class LinearSystems {
         } catch (InversionException e) {
             e.printStackTrace();
         }
+        System.out.format("Inverse Determinate: %n%.5f", inverseDeterminant);
+        System.out.println("");
 
         double productOfDeterminants = inverseDeterminant * determinant;
-        System.out.println("Product of determinants: ");
-        System.out.println(productOfDeterminants);
+        System.out.format("Product of determinants: %n%.5f%n", productOfDeterminants);
+        System.out.println("");
 
-//        //Next, test inverses
-//        Matrix identityMatrix = Matrix.createIdentityMatrix(classOneCovariance.numRows());
-//        System.out.println("");
-//        System.out.println("Class one inverse matrix:");
-//        Matrix classOneInverse = classOneCovariance.copy();
-//        try {
-//            classOneInverse.inverse(identityMatrix);
-//            classOneInverse.removeFirstColumn();
-//            classOneInverse.removeFirstColumn();
-//            System.out.println(classOneInverse);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            fail();
-//        }
+        try {
+            double determinateOfInverse = inverseMatrix.determinate();
+            double inverseOfDeterminate = 1/determinant;
+            System.out.format("The inverse of the determinant is %.2f%nThe determinate of the inverse is %.2f", inverseOfDeterminate, determinateOfInverse);
+            inverseMatrix.inverse(identityMatrix);
+            System.out.format("The inverse of the inverse is %s", inverseMatrix);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            double conditionNumber = 0.0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private static Matrix initializeVectorsFromFile(String filepath){

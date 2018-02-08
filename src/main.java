@@ -70,7 +70,6 @@ public class main {
         Vector classTwoMeanVector = Vector.mean(vectors[1]);
         Discriminate classTwoDiscriminant = new Discriminate(classTwoMeanVector, classTwoInverse, classTwoDeterminate);
         Discriminate[] discriminates = {classOneDiscriminant, classTwoDiscriminant};
-
         //Problem 7
         try {
             findMisclassifiedPoints(vectors, discriminates);
