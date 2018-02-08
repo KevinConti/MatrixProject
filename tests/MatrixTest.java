@@ -490,6 +490,34 @@ public class MatrixTest {
 
     }
 
+    @Test
+    public void testMaximum(){
+        double[] values = new double[]{-3, 4, 10, -999, 400, 32, 44};
+        double largestValue = Matrix.maximum(values);
+        assertEquals(400.0, largestValue, 0);
+    }
+
+    @Test
+    public void testRowSums(){
+        Matrix coefficientMatrix = createTestAugmentedMatrix();
+        coefficientMatrix.removeLastColumn();
+        double[] rowSums = coefficientMatrix.rowSums();
+        assertEquals(2.0, rowSums[0], 0);
+        assertEquals(5.0, rowSums[1], 0);
+        assertEquals(3.0, rowSums[2], 0);
+    }
+
+    @Test
+    public void testConditionNumber(){
+        Matrix coefficientMatrix = new Matrix(new double[][]{
+                {100, -200},
+                {-200, 401}
+        });
+        double conditionNumber = coefficientMatrix.conditionNumber();
+        assertEquals(3612.0, conditionNumber, .01);
+
+    }
+
     private Matrix[] initializeTestMatrices(){
         Matrix[] matrices = new Matrix[4];
         double[][] tableOne = new double[][]{
@@ -535,4 +563,5 @@ public class MatrixTest {
         }
         return  augmentedMatrix;
     }
+
 }

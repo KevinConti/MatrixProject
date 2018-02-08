@@ -87,6 +87,40 @@ public class Matrix {
         return index;
     }
 
+    public double[] rowSums(){
+        double[] sums = new double[this.numRows()];
+        for(int i = 0; i < numRows(); i++){
+            double currentRowValue = 0.0;
+            for(int j = 0; j < numColumns(); j++){
+                double absCellValue = Math.abs(this.getValueAt(i,j));
+                currentRowValue += absCellValue;
+            }
+            sums[i] = currentRowValue;
+        }
+        return sums;
+    }
+
+    public double conditionNumber(){
+        Matrix copyMatrix = this.copy();
+        Matrix identity = createIdentityMatrix(this.numRows());
+        try {
+            copyMatrix.inverse(identity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for(int i = 0; i < identity.numColumns(); i++){ //Purge identity matrix from copyMatrix
+            copyMatrix.removeFirstColumn();
+        }
+
+        double[] inverseRowSums = copyMatrix.rowSums();
+        double[] thisRowSums = this.rowSums();
+
+        double inverseMax = Matrix.maximum(inverseRowSums);
+        double thisMax = Matrix.maximum(thisRowSums);
+
+        return thisMax * inverseMax;
+    }
+
     public void inverse() throws InversionException {
         //'this' is an augmented coefficient matrix
         for(int j = 0; j < this.numRows(); j++){
@@ -426,5 +460,15 @@ public class Matrix {
             result += rowString;
         }
         return result;
+    }
+    //Takes an array of doubles and returns the largest value
+    public static double maximum(double[] sums){
+        double largest = -99999999;
+        for(double sum: sums){
+            if (sum > largest){
+                largest = sum;
+            }
+        }
+        return largest;
     }
 }
