@@ -70,6 +70,19 @@ public class main {
         Vector classTwoMeanVector = Vector.mean(vectors[1]);
         Discriminate classTwoDiscriminant = new Discriminate(classTwoMeanVector, classTwoInverse, classTwoDeterminate);
         Discriminate[] discriminates = {classOneDiscriminant, classTwoDiscriminant};
+
+        //Problem 6
+        try {
+            double g1m1Value = classOneDiscriminant.classify(classOneMeanVector.getX(), classOneMeanVector.getY());
+            double g2m1Value = classTwoDiscriminant.classify(classOneMeanVector.getX(), classOneMeanVector.getY());
+            double g1m2Value = classOneDiscriminant.classify(classTwoMeanVector.getX(), classTwoMeanVector.getY());
+            double g2m2Value = classTwoDiscriminant.classify(classTwoMeanVector.getX(), classTwoMeanVector.getY());
+            System.out.format("%ng1 of mu1 =%f%ng2 of mu1 is %f%n%ng1 of mu2 =%f%ng2 of mu2 is %f%n",g1m1Value,g2m1Value,g1m2Value,g2m2Value);
+            System.out.format("Therefore, mu1 should be in g1, and mu2 should be in g2%n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         //Problem 7
         try {
             findMisclassifiedPoints(vectors, discriminates);

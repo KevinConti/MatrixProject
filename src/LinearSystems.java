@@ -53,20 +53,27 @@ public class LinearSystems {
         try {
             double determinateOfInverse = inverseMatrix.determinate();
             double inverseOfDeterminate = 1/determinant;
-            System.out.format("The inverse of the determinant is %.2f%nThe determinate of the inverse is %.2f", inverseOfDeterminate, determinateOfInverse);
-            inverseMatrix.inverse(identityMatrix);
-            System.out.format("The inverse of the inverse is %s", inverseMatrix);
+            System.out.format("The inverse of the determinant is %.2f%nThe determinate of the inverse is %.2f%n", inverseOfDeterminate, determinateOfInverse);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            double conditionNumber = 0.0;
+            Matrix conditionNumberMatrix = linearMatrix.copy();
+            conditionNumberMatrix.removeLastColumn();
+            double conditionNumber = conditionNumberMatrix.conditionNumber();
+            System.out.format("%nThe condition number for this matrix is %f%n", conditionNumber);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
+        try {
+            Matrix squareMatrix = linearMatrix.copy();
+            squareMatrix.removeLastColumn();
+            System.out.println(Matrix.multiply(squareMatrix, inverseMatrix));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static Matrix initializeVectorsFromFile(String filepath){
