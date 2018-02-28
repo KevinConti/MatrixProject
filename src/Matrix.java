@@ -232,6 +232,8 @@ public class Matrix {
         this.setMatrix(augmentedMatrix.getMatrix());
     }
 
+    //Determines the trace of a matrix (the sum of it's diagonal entries)
+
     //Class Methods
     public static Matrix createIdentityMatrix(int numberOfRowsAndColumns){
         Matrix identityMatrix = new Matrix(numberOfRowsAndColumns, numberOfRowsAndColumns);

@@ -1,3 +1,5 @@
+import jdk.nashorn.api.tree.ArrayAccessTree;
+
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -90,5 +92,36 @@ public class InputParser {
             e.printStackTrace();
         }
         return linearMatrix;
+    }
+
+    public Vector[] convertP2data(String filepath) {
+        ArrayList<Vector> vectorsList = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+
+            String currentLine;
+            ArrayList<String> values = new ArrayList<String>();
+
+            while ((currentLine = br.readLine()) != null) {
+                String[] currentLineValues = currentLine.split("\t");
+                for (int i = 0; i < currentLineValues.length; i++) {
+                    values.add(currentLineValues[i]);
+                }
+            }
+
+            for (int i = 0; i < values.size(); i += 2) {
+                double xValue = Double.parseDouble(values.get(i));
+                double yValue = Double.parseDouble(values.get(i + 1));
+
+
+                Vector vector = new Vector(xValue, yValue);
+                vectorsList.add(vector);
+            }
+            return vectorsList.toArray(new Vector[0]);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error in convertP2data");
+            return null;
+        }
     }
 }

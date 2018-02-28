@@ -5,6 +5,18 @@ import java.util.ArrayList;
 
 public class main {
     public static void main(String[] args){
+//        runMatrixProject();
+        runEigenProject();
+    }
+
+    private static void runEigenProject(){
+        //1) Find mean vector and covariance matrix
+        Vector[] vectors = initializeSingleSetOfVectorsFromFile("data/p2data.txt");
+        Matrix covarianceMatrix = Matrix.toCovariance(vectors);
+        System.out.println(covarianceMatrix);
+    }
+
+    private static void runMatrixProject(){
         Vector[][] vectors = initializeVectorsFromFile("data/data.txt");
         System.out.println("Class One:");
         Matrix classOneCovariance = Matrix.toCovariance(vectors[0]);
@@ -177,5 +189,10 @@ public class main {
     private static Vector[][] initializeVectorsFromFile(String filepath){
         InputParser ip = new InputParser();
         return ip.convertFile(filepath);
+    }
+
+    private static Vector[] initializeSingleSetOfVectorsFromFile(String filepath){
+        InputParser ip = new InputParser();
+        return ip.convertP2data(filepath);
     }
 }
