@@ -6,14 +6,27 @@ import java.util.ArrayList;
 public class main {
     public static void main(String[] args){
 //        runMatrixProject();
-        runEigenProject();
+        try {
+            runEigenProject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private static void runEigenProject(){
+    private static void runEigenProject() throws Exception {
         //1) Find mean vector and covariance matrix
         Vector[] vectors = initializeSingleSetOfVectorsFromFile("data/p2data.txt");
         Matrix covarianceMatrix = Matrix.toCovariance(vectors);
-        System.out.println(covarianceMatrix);
+        System.out.printf("The covariance matrix is: \n%s\n", covarianceMatrix);
+
+        //2) Determine the trace of the covariance matrix
+        double trace = covarianceMatrix.trace();
+        System.out.printf("The trace of the covariance matrix is %f\n", trace);
+
+
+        //The determinant of the covariance matrix
+        double determinant = covarianceMatrix.determinate();
+        System.out.printf("\nThe determinant is %f\n", determinant);
     }
 
     private static void runMatrixProject(){

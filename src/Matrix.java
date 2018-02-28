@@ -233,6 +233,22 @@ public class Matrix {
     }
 
     //Determines the trace of a matrix (the sum of it's diagonal entries)
+    public double trace() throws Exception {
+        double sumOfDiagonals = 0.0;
+
+        //Matrix must be square
+        if (this.numColumns() != this.numRows()){
+            throw new Exception("Matrix must be square");
+        }
+
+        //Enumerate through diagonals, add to sum
+        for(int i = 0; i < this.numRows(); i++){
+            double currentValue = this.getValueAt(i,i);
+            sumOfDiagonals += currentValue;
+        }
+
+        return sumOfDiagonals;
+    }
 
     //Class Methods
     public static Matrix createIdentityMatrix(int numberOfRowsAndColumns){
