@@ -250,6 +250,12 @@ public class Matrix {
         return sumOfDiagonals;
     }
 
+    public Matrix leverriersMethod() throws Exception {
+        Matrix characteristicPolynomial = Matrix.createIdentityMatrix(this.numRows());
+
+        return characteristicPolynomial;
+    }
+
     //Class Methods
     public static Matrix createIdentityMatrix(int numberOfRowsAndColumns){
         Matrix identityMatrix = new Matrix(numberOfRowsAndColumns, numberOfRowsAndColumns);
