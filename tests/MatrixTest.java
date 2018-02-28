@@ -518,6 +518,40 @@ public class MatrixTest {
 
     }
 
+    @Test
+    public void testLeverriersMethod(){
+        //Test 3x3 Matrix
+        Matrix testMatrix = new Matrix(new double[][]{
+                {1, -1, 0},
+                {0, 2, -1},
+                {-1, 0, 1}
+        });
+
+        Matrix correctAnswer = new Matrix(new double[][]{
+                {-4, 0, 0},
+                {0, 5, 0},
+                {0, 0, -1}
+        });
+
+        Matrix resultMatrix = new Matrix(3,3);
+        try {
+            resultMatrix = testMatrix.leverriersMethod();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        for(int i = 0; i < correctAnswer.numRows(); i++){
+            for(int j = 0; j < correctAnswer.numColumns(); j++) {
+                assertEquals(correctAnswer.getValueAt(i, j), resultMatrix.getValueAt(i, j), 0);
+            }
+        }
+        //TODO test 1x1 matrix
+
+        //TODO test non-square matrix (assertFail)
+
+    }
+
     private Matrix[] initializeTestMatrices(){
         Matrix[] matrices = new Matrix[4];
         double[][] tableOne = new double[][]{
