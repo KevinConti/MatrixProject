@@ -286,6 +286,48 @@ public class Matrix {
         return characteristicPolynomial;
     }
 
+    //Purpose: Applies the power method to a Matrix
+    //Returns: An array of Matrices where Matrix[0] = 1x1 matrix containing the estimated eigenvalue
+    // and Matrix[1] = the associated eigenvector
+    //Parameters:
+    //  sigma: How close the residual error must be to zero in order for the function to return
+    //  maxIterations: how many loops the program will run through before returning it's best result (if sigma is not met)
+    //This method is NON-Destructive to the original array
+    public Matrix[] powerMethod(double sigma, int maxIterations) throws Exception {
+        Matrix[] answers = new Matrix[2];
+
+        Matrix y = new Matrix(this.numRows(), 1);
+        for(int i = 0; i < y.numRows(); i++){
+            if(i%2 == 0) {
+                y.setMatrix(i, 0, 0.0);
+            } else {
+                y.setMatrix(i, 0, 1.0);
+            }
+        }
+        Matrix x = Matrix.multiply(this, y);
+        Matrix r = new Matrix(1,1);
+        Matrix mu;
+        int k = 0;
+        do {
+            Matrix xDoubleBar = new Matrix(new double[][]{
+                    {x.maximumAbsoluteValue()}
+            }); //||x||
+            y = Matrix.divide(x, xDoubleBar);
+            x = Matrix.multiply(this, y); //x=Ay
+            Matrix temp1 = Matrix.multiply(Matrix.transpose(y), x);
+            Matrix temp2 = Matrix.multiply(Matrix.transpose(y), y);
+            mu = Matrix.divide(temp1, temp2);
+            temp1 = Matrix.multiply(y, mu);
+            r = Matrix.subtract(temp1, x);
+
+            k++;
+        } while(r.maximumAbsoluteValue() > sigma && k < maxIterations);
+        System.out.println(k);
+        answers[0] = mu;
+        answers[1] = y;
+        return answers;
+    }
+
     //Class Methods
     public static Matrix createIdentityMatrix(int numberOfRowsAndColumns){
         Matrix identityMatrix = new Matrix(numberOfRowsAndColumns, numberOfRowsAndColumns);
@@ -339,7 +381,7 @@ public class Matrix {
         //Set all values in 'inverted' = 1/x, where x = the value in that cell in 'denominator'
         for(int i = 0; i < inverted.numRows(); i++){
             for(int j = 0; j < inverted.numColumns(); j++){
-                inverted.setMatrix(i,j, 1/denominator.getValueAt(i,j));
+                inverted.setMatrix(i,j, 1.0/denominator.getValueAt(i,j));
             }
         }
         return Matrix.multiply(numerator, inverted);
@@ -556,7 +598,7 @@ public class Matrix {
     public double maximumAbsoluteValue(){
         double max = -9999999;
         for(int i = 0; i < this.numRows(); i++){
-            for(int j = 0; j < this.numRows(); j++){
+            for(int j = 0; j < this.numColumns(); j++){
                 double currentValue = this.getValueAt(i, j);
                 if(currentValue < 0){
                     currentValue *= -1;
