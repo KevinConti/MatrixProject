@@ -1,9 +1,7 @@
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class MatrixTest {
 
@@ -54,6 +52,28 @@ public class MatrixTest {
         };
         Matrix correctResult = new Matrix(correctResultTable);
         assertArrayEquals(addedMatrix.getMatrix(), correctResult.getMatrix());
+    }
+
+    @Test
+    public void testSubtract(){
+        Matrix one = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+
+        Matrix two = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+
+        Matrix subtracted = Matrix.subtract(one, two);
+        for(int i = 0; i < subtracted.numRows(); i++){
+            for(int j = 0; j < subtracted.numColumns(); j++){
+                assertEquals(0, subtracted.getValueAt(i, j), 0);
+            }
+        }
     }
 
     @Test
@@ -243,6 +263,32 @@ public class MatrixTest {
         assertEquals(-3.5, matrix.getValueAt(1,2), 0);
     }
 
+    @Test
+    public void testMultiplyByScalar(){
+        //Create test matrix
+        Matrix matrix = new Matrix(new double[][]{
+                {1,2,3},
+                {4,5,6},
+                {7,8,9}
+        });
+        Matrix copyMatrix = matrix.copy();
+        //Create test scalar
+        double scalar = 2.5;
+        //Do multiplication
+        Matrix resultMatrix = matrix.multiplyByScalar(scalar);
+        //Verify multiplication was successful
+        for(int i = 0; i < matrix.numColumns(); i++){
+            for(int j = 0; j < matrix.numRows(); j++){
+                assertEquals(matrix.getValueAt(i, j) * 2.5, resultMatrix.getValueAt(i, j), 0);
+            }
+        }
+        //Verify original matrix was not modified
+        for(int i = 0; i < matrix.numColumns(); i++){
+            for(int j = 0; j < matrix.numRows(); j++){
+                assertEquals(matrix.getValueAt(i, j), copyMatrix.getValueAt(i, j), 0);
+            }
+        }
+    }
     @Test
     public void testInverse(){
         //Initialize test matrices
@@ -461,6 +507,44 @@ public class MatrixTest {
     }
 
     @Test
+    public void testDivide(){
+        Matrix testMatrix = new Matrix(new double[][]{
+                {2, 3, 4},
+                {-2, 3, 4},
+                {5, 6, 7}
+        });
+
+        Matrix multMatrix = new Matrix(new double[][]{
+                {1.0/2, 1.0/3, 1.0/4},
+                {1.0/5, 1.0/6, 1.0/7},
+                {1.0/8, 1.0/9, 1.0/10}
+        });
+
+        Matrix divMatrix = new Matrix(new double[][]{
+                {2, 3, 4},
+                {5, 6, 7},
+                {8, 9, 10}
+        });
+        try {
+            multMatrix = Matrix.multiply(testMatrix, multMatrix);
+            divMatrix = Matrix.divide(testMatrix, divMatrix);
+
+
+            for(int i = 0; i < testMatrix.numRows(); i++){
+                for(int j = 0; j < testMatrix.numColumns(); j++){
+                    try {
+                        assertEquals(multMatrix.getValueAt(i,j),divMatrix.getValueAt(i,j), 0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @Test
     public void testCreateAugmentedMatrix(){
 
         double[][] coefficientMatrixTable = new double[][]{
@@ -546,9 +630,24 @@ public class MatrixTest {
                 assertEquals(correctAnswer.getValueAt(i, j), resultMatrix.getValueAt(i, j), 0);
             }
         }
-        //TODO test 1x1 matrix
-
-        //TODO test non-square matrix (assertFail)
+        //test 1x1 matrix (assert error is thrown)
+        testMatrix = new Matrix(1,1);
+        boolean flag = true;
+        try {
+            resultMatrix = testMatrix.leverriersMethod();
+            flag = false; //Throws if no exception is thrown
+        } catch (Exception e) {
+            assertTrue(flag);
+        }
+        //test non-square matrix (assertFail)
+        testMatrix = new Matrix(1,3);
+        flag = true;
+        try {
+            resultMatrix = testMatrix.leverriersMethod();
+            flag = false; //Throws if no exception is thrown
+        } catch (Exception e) {
+            assertTrue(flag);
+        }
 
     }
 

@@ -250,9 +250,39 @@ public class Matrix {
         return sumOfDiagonals;
     }
 
+    //This method applies leverrier's method to a copy of the matrix that it is called upon,
+    //Returns: A coefficient matrix with zeros in the upper and lower triangle (only has values down the middle)
+    //these values represent the coefficients for the characteristic equation, starting with the highest degree
+    //Throws: Exception for various reasons, such as the inability to create an identity matrix for some reason
     public Matrix leverriersMethod() throws Exception {
         Matrix characteristicPolynomial = Matrix.createIdentityMatrix(this.numRows());
+        //Create a copy of this matrix that we can utilize
+        Matrix A = this.copy();
+        //Set Bn = A, and a(n) = -trace(Bn)
+        Matrix Bn = A.copy();
+        double an = -1 * Bn.trace();
 
+        //For k=n-1 down to 1, compute:
+        int n = this.numRows();
+        //assign value to characteristic polynomial (off by one issue)
+        int count = 0;
+        characteristicPolynomial.setMatrix(count, count, an);
+        count++;
+        for(int k = n-1; k > 0; k--){
+            //Bk = A(Bk+1 + a(k+1)*I)
+            Matrix identityMatrix = Matrix.createIdentityMatrix(this.numRows());
+            Matrix scaledMatrix = identityMatrix.multiplyByScalar(an);
+            Matrix combinedMatrix = Matrix.add(Bn, scaledMatrix);
+            Bn = Matrix.multiply(A, combinedMatrix);
+
+            //ak = -1*(trace(Bk))/(n-k+1)
+            double trace = Bn.trace();
+            an = -1 * trace / (n - k + 1);
+
+            //Assign value to characteristic polynomial
+            characteristicPolynomial.setMatrix(count, count, an);
+            count++;
+        }
         return characteristicPolynomial;
     }
 
@@ -285,6 +315,12 @@ public class Matrix {
         return new Matrix(addedMatrixArray);
     }
 
+    public static Matrix subtract(Matrix matrixOne, Matrix matrixTwo){
+        //divide MatrixTwo by -1
+        Matrix.divideByScalarDestructive(matrixTwo, -1.0);
+        //Add the two together
+        return Matrix.add(matrixOne, matrixTwo);
+    }
     //Warning, this is a destructive method.
     public static void divideByScalarDestructive(Matrix matrix, double scalar){
         //enumerate through each entry in matrix table, divide by the scalar and set that new value into the matrix
@@ -298,6 +334,17 @@ public class Matrix {
         }
     }
 
+    public static Matrix divide(Matrix numerator, Matrix denominator) throws Exception {
+        Matrix inverted = new Matrix(denominator.numRows(), denominator.numColumns());
+        //Set all values in 'inverted' = 1/x, where x = the value in that cell in 'denominator'
+        for(int i = 0; i < inverted.numRows(); i++){
+            for(int j = 0; j < inverted.numColumns(); j++){
+                inverted.setMatrix(i,j, 1/denominator.getValueAt(i,j));
+            }
+        }
+        return Matrix.multiply(numerator, inverted);
+    }
+
     //Warning, this is a destructive method.
     //This method is used for Gauss-Jordan elimination
     public static void divideByScalarDestructive(Matrix matrix, double scalar, int rowIndex){
@@ -305,6 +352,16 @@ public class Matrix {
             double matrixValue = matrix.getValueAt(rowIndex, columnIndex);
             matrix.setMatrix(rowIndex, columnIndex, matrixValue / scalar);
         }
+    }
+
+    public Matrix multiplyByScalar(double scalar){
+        Matrix multipliedMatrix = this.copy();
+        for (int i = 0; i < multipliedMatrix.numRows(); i++){
+            for(int j = 0; j < multipliedMatrix.numColumns(); j++){
+                multipliedMatrix.setMatrix(i,j,multipliedMatrix.getValueAt(i,j) * scalar);
+            }
+        }
+        return multipliedMatrix;
     }
 
     public static Matrix createAugmentedMatrix(Matrix squareMatrix, Matrix coefficientMatrix) throws Exception {
@@ -494,5 +551,21 @@ public class Matrix {
             }
         }
         return largest;
+    }
+    //Returns the largest value in this array
+    public double maximumAbsoluteValue(){
+        double max = -9999999;
+        for(int i = 0; i < this.numRows(); i++){
+            for(int j = 0; j < this.numRows(); j++){
+                double currentValue = this.getValueAt(i, j);
+                if(currentValue < 0){
+                    currentValue *= -1;
+                }
+                if (currentValue > max){
+                    max = currentValue;
+                }
+            }
+        }
+        return max;
     }
 }
