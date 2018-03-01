@@ -651,6 +651,28 @@ public class MatrixTest {
 
     }
 
+    @Test
+    public void testPowerMethod(){
+        try {
+            Matrix exampleMatrix = new Matrix(new double[][]{
+                    {6, -11, 6},
+                    {1, 0, 0 },
+                    {0, 1, 0}
+            });
+
+            Matrix[] results = exampleMatrix.powerMethod(.001, 1000000);
+            assertEquals(3.001808, results[0].getValueAt(0,0), 0.1);
+            Matrix eigenvector = results[1];
+            assertEquals(-1.0, eigenvector.getValueAt(0,0), 0.1);
+            assertEquals(-0.33303, eigenvector.getValueAt(1,0), 0.1);
+            assertEquals(0.11086, eigenvector.getValueAt(2,0), 0.1);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     private Matrix[] initializeTestMatrices(){
         Matrix[] matrices = new Matrix[4];
         double[][] tableOne = new double[][]{
