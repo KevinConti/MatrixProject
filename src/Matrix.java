@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.Math;
 
@@ -328,6 +329,52 @@ public class Matrix {
         return answers;
     }
 
+    //Purpose: Given a matrix, apply jacobi's method to it (non-destructive)
+    //Returns: Array of matrices where:
+      //Matrix[0] = A permutation of A which has zeros everywhere except the diagonals,
+        //and the diagonals are the eigenvalues
+      //Matrix[1] = P, whose columns are the corresponding eigenvectors
+    //Parameters:
+      //sigma: The maximum magnitude allowed above the diagonal. Smaller values lead to more accurate results
+    public Matrix[] jacobi(double sigma) throws Exception {
+        if(this.numColumns() != this.numRows()) {
+            return null;
+        }
+        Matrix A = this.copy();
+        Matrix P = Matrix.createIdentityMatrix(A.numRows());
+        Matrix R;
+        Vector largestIndex = A.largestMagnitudeAboveDiagonal();
+        int p = (int) largestIndex.getX();
+        int q = (int) largestIndex.getY();
+        double Apq = A.getValueAt(p, q);
+
+        while(Math.abs(Apq) > sigma){
+            double arctanNumerator = 2 * Apq;
+            double arctanDenominator = A.getValueAt(p,p) - A.getValueAt(q,q);
+            double arctanAnswer = Math.atan(arctanNumerator/arctanDenominator);
+            double angle = 0.5 * arctanAnswer;
+
+            R = Matrix.createIdentityMatrix(A.numRows());
+            R.setMatrix(p, p, Math.cos(angle));
+            R.setMatrix(q, q, Math.cos(angle));
+            R.setMatrix(p, q, -1*Math.sin(angle));
+            R.setMatrix(q, p, Math.sin(angle));
+
+            P = Matrix.multiply(P, R);
+            Matrix RTranspose = Matrix.transpose(R);
+            A = Matrix.multiply(Matrix.multiply(RTranspose, A), R);
+
+            largestIndex = A.largestMagnitudeAboveDiagonal();
+            p = (int) largestIndex.getX();
+            q = (int) largestIndex.getY();
+            Apq = A.getValueAt(p, q);
+        }
+        Matrix[] results = new Matrix[2];
+        results[0] = A;
+        results[1] = P;
+        return results;
+    }
+
     //Class Methods
     public static Matrix createIdentityMatrix(int numberOfRowsAndColumns){
         Matrix identityMatrix = new Matrix(numberOfRowsAndColumns, numberOfRowsAndColumns);
@@ -594,7 +641,7 @@ public class Matrix {
         }
         return largest;
     }
-    //Returns the largest value in this array
+    //Returns the largest value in this matrix
     public double maximumAbsoluteValue(){
         double max = -9999999;
         for(int i = 0; i < this.numRows(); i++){
@@ -609,5 +656,36 @@ public class Matrix {
             }
         }
         return max;
+    }
+
+    public Vector largestMagnitudeAboveDiagonal(){
+        ArrayList<Vector> indices = new ArrayList<>();
+        Vector result;
+
+        for(int currentRowIndex = 0; currentRowIndex < this.numRows(); currentRowIndex++){
+            for(int currentColumnIndex = 0; currentColumnIndex < this.numColumns(); currentColumnIndex++){
+                if(currentColumnIndex > currentRowIndex) { //Above the diagonal
+                    indices.add(new Vector(currentRowIndex, currentColumnIndex)); //Add the current value
+                }
+            }
+        }
+
+        result = findLargestMagnitude(this, indices);
+
+        return result;
+    }
+
+    private Vector findLargestMagnitude(Matrix matrix, ArrayList<Vector> indices){
+        Vector largestVector = null;
+        double largestMagnitude = -1;
+        for(Vector currentVector: indices){
+            double magnitude = matrix.getValueAt((int) currentVector.getX(), (int) currentVector.getY());
+            if (magnitude < 0) {magnitude *= -1;}
+            if (magnitude > largestMagnitude){
+                largestMagnitude = magnitude;
+                largestVector = currentVector;
+            }
+        }
+        return largestVector;
     }
 }

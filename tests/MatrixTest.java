@@ -662,15 +662,25 @@ public class MatrixTest {
 
             Matrix[] results = exampleMatrix.powerMethod(.001, 1000000);
             assertEquals(3.001808, results[0].getValueAt(0,0), 0.1);
-            Matrix eigenvector = results[1];
-            assertEquals(-1.0, eigenvector.getValueAt(0,0), 0.1);
-            assertEquals(-0.33303, eigenvector.getValueAt(1,0), 0.1);
-            assertEquals(0.11086, eigenvector.getValueAt(2,0), 0.1);
 
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void testJacobi(){
+        try{
+            Matrix testMatrix = new Matrix(new double[][]{
+                    {-1, 2},
+                    {2, 2}
+            });
+            Matrix[] results = testMatrix.jacobi(.001);
+            System.out.println();
+        } catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
     }
 
     private Matrix[] initializeTestMatrices(){
@@ -717,6 +727,22 @@ public class MatrixTest {
             fail();
         }
         return  augmentedMatrix;
+    }
+
+    @Test
+    public void testLargestMagnitudeAboveDiagonal(){
+        Matrix squareMatrix = new Matrix(new double[][]{
+                {1, -4, 0},
+                {-2, 2, -1},
+                {0, 1, -2}
+        });
+
+        Vector largest = squareMatrix.largestMagnitudeAboveDiagonal();
+        int p = (int) largest.getX();
+        int q = (int) largest.getY();
+
+        assertEquals(0, p, 0);
+        assertEquals(1, q, 0);
     }
 
 }
