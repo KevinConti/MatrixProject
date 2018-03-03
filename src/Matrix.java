@@ -441,6 +441,26 @@ public class Matrix {
         return A;
     }
 
+    public boolean isUpperBlockTriangular(double sigma){
+        boolean bool = true;
+        //Test for square matrix
+        if(this.numColumns() != this.numRows()){
+            bool = false;
+        }
+        for(int i = 0; i < this.numColumns(); i++) {
+            //For each element along the subdiagonal, check and see if the value below it is < sigma
+            //subdiagonal element is matrix(row: i+1, column: i
+            for(int j = i+2; j < this.numRows(); j++) {
+                if (i < this.numRows()) {
+                    if (Math.abs(this.getValueAt(j, i)) > sigma){
+                        bool = false;
+                    }
+                }
+            }
+        }
+            return bool;
+    }
+
     //Class Methods
     public static Matrix createIdentityMatrix(int numberOfRowsAndColumns){
         Matrix identityMatrix = new Matrix(numberOfRowsAndColumns, numberOfRowsAndColumns);
