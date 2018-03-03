@@ -378,10 +378,67 @@ public class Matrix {
                 throw new Exception("Infinite loop, jacobi's timed out");
             }
         }
+        String debug = String.format("Jacobi's method calculated in %d iterations", count);
+        System.err.println(debug);
         Matrix[] results = new Matrix[2];
         results[0] = A;
         results[1] = P;
         return results;
+    }
+
+    public Matrix householders() throws Exception {
+        //Verify the matrix is square, else throw error
+        if (this.numColumns() != this.numRows()) {
+            String error = String.format("The matrix %s is not square. Householder's requires a square matrix");
+            throw new Exception(error);
+        }
+
+        Matrix A = this.copy();
+        Matrix Q = Matrix.createIdentityMatrix(A.numRows());
+
+        //Determine alpha
+        double alpha = 0.0;
+        for (int k = 0; k < A.numRows() - 2; k++) {
+            double sign = Math.signum(A.getValueAt(k + 1, k));
+            double sqrt = 0.0;
+            for (int j = k + 1; j < A.numColumns(); j++) {
+                sqrt += Math.pow(A.getValueAt(j, k), 2);
+            }
+            sqrt = Math.sqrt(sqrt);
+            alpha = sqrt;
+            if (sign < 0.0) {
+                alpha *= -1;
+            }
+
+            //Determine u^t
+            Matrix uTranspose = new Matrix(1, A.numColumns());
+            for(int n = 0; n < A.numRows(); n++){
+                if(n < k+1){
+                    uTranspose.setMatrix(0, n, 0);
+                } else if(n == k+1){
+                    //this cell = Ak+1,k + alpha
+                    uTranspose.setMatrix(0, n, A.getValueAt(k+1, k) + alpha);
+                } else if(n > k+1){
+                    uTranspose.setMatrix(0, n, A.getValueAt(n, k));
+                }
+            }
+
+            //P(u) = I - (2*u*u^t)/(u^t*u)
+            Matrix I = Matrix.createIdentityMatrix(A.numRows());
+            Matrix u = Matrix.transpose(uTranspose);
+            Matrix quotient = Matrix.multiply(u, uTranspose);
+            quotient = quotient.multiplyByScalar(2.0);
+            Matrix denominator = Matrix.multiply(uTranspose, u);
+            Matrix.divideByScalarDestructive(quotient, denominator.getValueAt(0,0));
+            Matrix P = Matrix.subtract(I, quotient);
+
+//            Q = Matrix.createIdentityMatrix(A.numRows());
+            Q = Matrix.multiply(Q, P);
+            A = Matrix.multiply(P, A);
+            A = Matrix.multiply(A, P);
+        }
+
+        return A;
     }
 
     //Class Methods
