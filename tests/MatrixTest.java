@@ -669,18 +669,54 @@ public class MatrixTest {
     }
 
     @Test
+    //Jacobi's requires a symmetric matrix
     public void testJacobi(){
         try{
+            //Should throw error on nxn but non-symmetric matrix
+            try{
+                Matrix unsymmetricMatrix = new Matrix(new double[][]{
+                        {1.0, -2.0},
+                        {3.0, 4.0}
+                });
+                unsymmetricMatrix.jacobi(0.0001);
+                fail();
+            } catch (UnsymmetricException e){
+                System.err.println("Unsymmetric Exception caught (as intended for test)");
+            }
+
+            //2x2 test
             Matrix testMatrix = new Matrix(new double[][]{
-                    {-1, 2},
-                    {2, 2}
+                    {0.26, -0.02},
+                    {-0.02, 0.04}
             });
             Matrix[] results = testMatrix.jacobi(.001);
-            System.out.println();
+            //results[0] (Aka Matrix A) should have it's eigenvalues as diagonal
+            //and 0 on the diagonal
+            double eigenValueOne = 0.261803398875;
+            double eigenValueTwo = 0.038196601125;
+            assertEquals(eigenValueOne, results[0].getValueAt(0,0),0.0000001);
+            assertEquals(0.0, results[0].getValueAt(0,1), 0.0000001);
+            assertEquals(0.0, results[0].getValueAt(1,0),0.0000001);
+            assertEquals(eigenValueTwo, results[0].getValueAt(1,1), 0.0000001);
+
+            //results[1] (Aka matrix P) should have the associated eigenvectors as it's rows
+            //Such that eigenvalueOne is associated with column 1, eigenvalue 2 is associated with
+            //column 2
+            Matrix P = results[1];
+            double[][] correctPValues = new double[][]{
+                    { 0.995959313953, 0.089805595316 },
+                    { -0.089805595316, 0.995959313953 }
+            };
+            for(int i = 0; i < P.numRows(); i++){
+                for(int j = 0; j < P.numColumns(); j++) {
+                    assertEquals(correctPValues[i][j], P.getValueAt(i, j), 0.00000001);
+                }
+            }
         } catch (Exception e){
             e.printStackTrace();
             fail();
         }
+
     }
 
     private Matrix[] initializeTestMatrices(){
