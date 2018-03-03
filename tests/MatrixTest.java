@@ -716,7 +716,78 @@ public class MatrixTest {
             e.printStackTrace();
             fail();
         }
+    }
+    @Test
+    public void testHouseholders(){
+        //Throw error on non-square matrix
+        Matrix nonSquare = new Matrix(new double[][]{
+                {1, 2},
+                {1, 3},
+                {4, 2}
+        });
+        try{
+            Matrix shouldFail = nonSquare.householders();
+            fail();
+        } catch (Exception e){
+            System.err.println("Householder's method threw error on non-square matrix (as intended for test)");
+        }
 
+        //Simple example
+        Matrix testMatrix = new Matrix(new double[][]{
+                {1, 2, 3},
+                {3, 5, 6},
+                {4, 8, 9}
+        });
+        try {
+            Matrix householders = testMatrix.householders();
+            assertEquals(1.0, householders.getValueAt(0, 0), .00001);
+            assertEquals(-18.0 / 5.0, householders.getValueAt(0, 1), .00001);
+            assertEquals(1.0 / 5.0, householders.getValueAt(0, 2), .00001);
+            assertEquals(-5.0, householders.getValueAt(1, 0), .00001);
+            assertEquals(357.0 / 25.0, householders.getValueAt(1, 1), .00001);
+            assertEquals(26.0 / 25.0, householders.getValueAt(1, 2), .00001);
+            assertEquals(0, householders.getValueAt(2, 0), .00001);
+            assertEquals(-24.0 / 25.0, householders.getValueAt(2, 1), .00001);
+            assertEquals(-7.0 / 25.0, householders.getValueAt(2, 2), .00001);
+        } catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+
+        //More complex example (multiple iterations)
+        //Simple example
+        testMatrix = new Matrix(new double[][]{
+                {4, 1, -2, 2},
+                {1, 2, 0, 1},
+                {-2, 0, 3, -2},
+                {2, 1, -2, -1}
+        });
+        try {
+            Matrix householders = testMatrix.householders();
+            assertEquals(4, householders.getValueAt(0, 0), .00001);
+            assertEquals(-3, householders.getValueAt(0, 1), .00001);
+            assertEquals(0, householders.getValueAt(0, 2), .00001);
+            assertEquals(0, householders.getValueAt(0, 3), .00001);
+
+            assertEquals(-3, householders.getValueAt(1, 0), .00001);
+            assertEquals(10.0 / 3.0, householders.getValueAt(1, 1), .00001);
+            assertEquals(-5.0 / 3.0, householders.getValueAt(1, 2), .00001);
+            assertEquals(0, householders.getValueAt(1, 3), .00001);
+
+            assertEquals(0, householders.getValueAt(2, 0), .00001);
+            assertEquals(-5.0 / 3.0, householders.getValueAt(2, 1), .00001);
+            assertEquals(-33.0 / 25.0, householders.getValueAt(2, 2), .00001);
+            assertEquals(68.0/75.0, householders.getValueAt(2, 3), .00001);
+
+            assertEquals(0, householders.getValueAt(3, 0), .00001);
+            assertEquals(0, householders.getValueAt(3, 1), .00001);
+            assertEquals(68.0 / 75.0, householders.getValueAt(3, 2), .00001);
+            assertEquals(149.0/75.0, householders.getValueAt(3, 3), .00001);
+
+        } catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
     }
 
     private Matrix[] initializeTestMatrices(){
