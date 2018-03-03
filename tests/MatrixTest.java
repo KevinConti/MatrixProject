@@ -790,6 +790,47 @@ public class MatrixTest {
         }
     }
 
+    @Test
+    public void testisUpperBlockTriangular(){
+        double sigma = .000001;
+        Matrix notUpperBlock = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+        Matrix isUpperBlock = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {0, 8, 9}
+        });
+        Matrix bigUpperBlock = new Matrix(new double[][]{
+                {1, 2, 3, 5, 6},
+                {4, 5, 6, 7, 8},
+                {0, 8, 9, 10, 11},
+                {0, 0, 14, 15, 16},
+                {0, 0, 0, 20, 21}
+        });
+        Matrix almostUpperBlock = new Matrix(new double[][]{
+                {1, 2, 3, 5, 6},
+                {4, 5, 6, 7, 8},
+                {0, 8, 9, 10, 11},
+                {0, 0, 14, 15, 16},
+                {0, 0, 0.05, 20, 21}
+        });
+        assertFalse(notUpperBlock.isUpperBlockTriangular(sigma));
+        assertTrue(isUpperBlock.isUpperBlockTriangular(sigma));
+        assertTrue(bigUpperBlock.isUpperBlockTriangular(sigma));
+        assertFalse(almostUpperBlock.isUpperBlockTriangular(sigma));
+
+        //Should return false on non-square matrices
+        Matrix notSquare = new Matrix(new double[][]{
+                {1, 2, 3, 5, 6},
+                {4, 5, 6, 7, 8},
+                {7, 8, 9, 10, 11}
+        });
+        assertFalse(notSquare.isUpperBlockTriangular(sigma));
+    }
+
     private Matrix[] initializeTestMatrices(){
         Matrix[] matrices = new Matrix[4];
         double[][] tableOne = new double[][]{
