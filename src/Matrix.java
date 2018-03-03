@@ -323,7 +323,8 @@ public class Matrix {
 
             k++;
         } while(r.maximumAbsoluteValue() > sigma && k < maxIterations);
-        System.out.println(k);
+        String debug = String.format("The power method took %d iterations", k);
+        System.err.println(debug);
         answers[0] = mu;
         answers[1] = y;
         return answers;
@@ -337,9 +338,13 @@ public class Matrix {
     //Parameters:
       //sigma: The maximum magnitude allowed above the diagonal. Smaller values lead to more accurate results
     public Matrix[] jacobi(double sigma) throws Exception {
-        if(this.numColumns() != this.numRows()) {
-            return null;
+        //Verify that matrix is symmetric, and throw Exception if not
+        Matrix transpose = Matrix.transpose(this);
+        if(!Matrix.isEqual(this, transpose)){
+            throw new UnsymmetricException();
         }
+        //Counter to prevent infinite loop;
+        int count = 0;
         Matrix A = this.copy();
         Matrix P = Matrix.createIdentityMatrix(A.numRows());
         Matrix R;
@@ -368,6 +373,10 @@ public class Matrix {
             p = (int) largestIndex.getX();
             q = (int) largestIndex.getY();
             Apq = A.getValueAt(p, q);
+            count++;
+            if(count > 1000000){
+                throw new Exception("Infinite loop, jacobi's timed out");
+            }
         }
         Matrix[] results = new Matrix[2];
         results[0] = A;
@@ -451,6 +460,26 @@ public class Matrix {
             }
         }
         return multipliedMatrix;
+    }
+
+    //This method compares two matrixes and determines if they are exact copies
+    //This checks equality, not if they are the same location in memory
+    public static boolean isEqual(Matrix matrixOne, Matrix matrixTwo){
+        boolean isEqual = true;
+        if(matrixOne.numColumns() != matrixTwo.numColumns() || matrixOne.numRows() != matrixTwo.numRows()){
+            isEqual = false;
+        } else {
+            int currentRow = 0;
+            while(currentRow != matrixOne.numRows() - 1){
+                for(int i = 0; i < matrixOne.numColumns(); i++){
+                    if(matrixOne.getValueAt(currentRow, i) != matrixTwo.getValueAt(currentRow, i)){
+                        isEqual = false;
+                    }
+                }
+                currentRow++;
+            }
+        }
+        return isEqual;
     }
 
     public static Matrix createAugmentedMatrix(Matrix squareMatrix, Matrix coefficientMatrix) throws Exception {
@@ -575,7 +604,10 @@ public class Matrix {
                     for (int i = 0; i < numberOfMultiplicationsPerCell; i++) {
                         sum += matrixOne.getMatrix()[x][i] * matrixTwo.getMatrix()[i][y];
                     }
-
+                    //Rounding to 0 for very low numbers for easier observation
+                    if(Math.abs(sum) < .00000000001){
+                        sum = 0;
+                    }
                     multipliedMatrix.setMatrix(x, y, sum);
                 }
             }
