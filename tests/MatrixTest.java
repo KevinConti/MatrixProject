@@ -764,6 +764,52 @@ public class MatrixTest {
         }
         return  augmentedMatrix;
     }
+    @Test
+    public void testIsEqual(){
+        //same matrix should return true
+        Matrix matrixOne = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+        assertTrue(Matrix.isEqual(matrixOne, matrixOne));
+
+        //Different matrix of same values should return true
+        Matrix matrixTwo = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+        assertTrue(Matrix.isEqual(matrixOne, matrixTwo));
+
+        //Two different matrices of different sizes should return false
+        Matrix matrixThree = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6}
+        });
+        assertFalse(Matrix.isEqual(matrixOne, matrixThree));
+
+        //Two different matrices of same size but different values should return false
+        Matrix matrixFour = new Matrix(new double[][]{
+                {2, 10, 25},
+                {28, 43, 56},
+                {78, 23, 22}
+        });
+        assertFalse(Matrix.isEqual(matrixOne, matrixFour));
+        //Check off by one errors
+        Matrix firstValueDifferent = new Matrix(new double[][]{
+                {2, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+        Matrix lastValueDifferent = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 22}
+        });
+        assertFalse(Matrix.isEqual(matrixOne, firstValueDifferent));
+        assertFalse(Matrix.isEqual(matrixOne, lastValueDifferent));
+    }
 
     @Test
     public void testLargestMagnitudeAboveDiagonal(){

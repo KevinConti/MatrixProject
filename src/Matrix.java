@@ -470,7 +470,7 @@ public class Matrix {
             isEqual = false;
         } else {
             int currentRow = 0;
-            while(currentRow != matrixOne.numRows() - 1){
+            while(currentRow != matrixOne.numRows()){
                 for(int i = 0; i < matrixOne.numColumns(); i++){
                     if(matrixOne.getValueAt(currentRow, i) != matrixTwo.getValueAt(currentRow, i)){
                         isEqual = false;
