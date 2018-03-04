@@ -821,35 +821,39 @@ public class MatrixTest {
     @Test
     public void testQR(){
         double sigma = .000001;
+//        Matrix exampleMatrix = new Matrix(new double[][]{
+//                {2, 4, 2},
+//                {-1, 0, -4},
+//                {2, 2, -1}
+//        });
         Matrix exampleMatrix = new Matrix(new double[][]{
-                {-3.9, -0.6, -3.9, 0.4},
-                {1, 0, 0, 0},
-                {0, 1, 0, 0},
-                {0, 0, 1, 0}
+                {1, 3, 0, 0},
+                {3, 2, 1, 0},
+                {0, 1, 3, 4},
+                {0, 0, 4, 1}
         });
         try {
             Matrix qr = exampleMatrix.qr(sigma, 100000);
 
-//            assertEquals(11.0905, qr.getValueAt(0, 0), 0);
-//            assertEquals(0.0902, qr.getValueAt(0, 1), 0);
-//            assertEquals(-4.6887, qr.getValueAt(0, 2), 0);
-//            assertEquals(-0.9918, qr.getValueAt(0, 3), 0);
-//
-//            assertEquals(0, qr.getValueAt(1, 0), 0);
-//            assertEquals(-11.9160, qr.getValueAt(1, 1), 0);
-//            assertEquals(-0.7068, qr.getValueAt(1, 2), 0);
-//            assertEquals(-11.6725, qr.getValueAt(1, 3), 0);
-//
-//            assertEquals(0, qr.getValueAt(2, 0), 0);
-//            assertEquals(0, qr.getValueAt(2, 1), 0);
-//            assertEquals(4.8494, qr.getValueAt(2, 2), 0);
-//            assertEquals(-2.0417, qr.getValueAt(2, 3), 0);
-//
-//            assertEquals(0, qr.getValueAt(3, 0), 0);
-//            assertEquals(0, qr.getValueAt(3, 1), 0);
-//            assertEquals(0, qr.getValueAt(3, 2), 0);
-//            assertEquals(0.7755, qr.getValueAt(3, 3), 0);
-            fail();
+            assertEquals(6.3589, qr.getValueAt(0, 0), 0.001);
+            assertEquals(0, qr.getValueAt(0, 1), 0.001);
+            assertEquals(0, qr.getValueAt(0, 2), 0.001);
+            assertEquals(0, qr.getValueAt(0, 3), 0.001);
+
+            assertEquals(0, qr.getValueAt(1, 0), 0.001);
+            assertEquals(4.37228, qr.getValueAt(1, 1), 0.001);
+            assertEquals(0, qr.getValueAt(1, 2), 0.001);
+            assertEquals(0, qr.getValueAt(1, 3), 0.001);
+
+            assertEquals(0, qr.getValueAt(2, 0), 0.001);
+            assertEquals(0, qr.getValueAt(2, 1), 0.001);
+            assertEquals(-2.3589, qr.getValueAt(2, 2), 0.001);
+            assertEquals(0, qr.getValueAt(2, 3), 0.001);
+
+            assertEquals(0, qr.getValueAt(3, 0), 0.001);
+            assertEquals(0, qr.getValueAt(3, 1), 0.001);
+            assertEquals(0, qr.getValueAt(3, 2), 0.001);
+            assertEquals(-1.37228, qr.getValueAt(3, 3), 0.001);
         } catch (Exception e){
             e.printStackTrace();
             fail();
@@ -866,22 +870,22 @@ public class MatrixTest {
         });
         Matrix isUpperBlock = new Matrix(new double[][]{
                 {1, 2, 3},
-                {4, 5, 6},
-                {0, 8, 9}
+                {0, 5, 6},
+                {0, 0, 9}
         });
         Matrix bigUpperBlock = new Matrix(new double[][]{
                 {1, 2, 3, 5, 6},
-                {4, 5, 6, 7, 8},
-                {0, 8, 9, 10, 11},
-                {0, 0, 14, 15, 16},
-                {0, 0, 0, 20, 21}
+                {0, 5, 6, 7, 8},
+                {0, 0, 9, 10, 11},
+                {0, 0, 0, 15, 16},
+                {0, 0, 0, 0, 21}
         });
         Matrix almostUpperBlock = new Matrix(new double[][]{
                 {1, 2, 3, 5, 6},
-                {4, 5, 6, 7, 8},
-                {0, 8, 9, 10, 11},
-                {0, 0, 14, 15, 16},
-                {0, 0, 0.05, 20, 21}
+                {0, 5, 6, 7, 8},
+                {0, 0, 9, 10, 11},
+                {0, 0, 0, 15, 16},
+                {0, 0, 0.00, 0.05, 21}
         });
         assertFalse(notUpperBlock.isUpperBlockTriangular(sigma));
         assertTrue(isUpperBlock.isUpperBlockTriangular(sigma));

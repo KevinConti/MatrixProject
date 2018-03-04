@@ -450,7 +450,7 @@ public class Matrix {
 
         do{
             Matrix Qt = Matrix.createIdentityMatrix(B.numRows());
-            for(int k = 0; k < this.numRows() - 1; k++) {
+            for(int k = 0; k < B.numRows() - 1; k++) {
                 double c, s;
                 double Bkk = B.getValueAt(k, k);
                 double denominator = Math.sqrt(Math.pow(Bkk, 2) + Math.pow(B.getValueAt(k + 1, k), 2));
@@ -461,7 +461,7 @@ public class Matrix {
                 P.setMatrix(k, k, c);
                 P.setMatrix(k + 1, k + 1, c);
                 P.setMatrix(k + 1, k, -1 * s);
-                P.setMatrix(k, k + 1, P.getValueAt(k + 1, k));
+                P.setMatrix(k, k + 1, s);
 
                 B = Matrix.multiply(P, B);
                 Qt = Matrix.multiply(P, Qt);
@@ -483,7 +483,7 @@ public class Matrix {
         for(int i = 0; i < this.numColumns(); i++) {
             //For each element along the subdiagonal, check and see if the value below it is < sigma
             //subdiagonal element is matrix(row: i+1, column: i
-            for(int j = i+2; j < this.numRows(); j++) {
+            for(int j = i+1; j < this.numRows(); j++) {
                 if (i < this.numRows()) {
                     if (Math.abs(this.getValueAt(j, i)) > sigma){
                         bool = false;
