@@ -389,7 +389,7 @@ public class Matrix {
     public Matrix householders() throws Exception {
         //Verify the matrix is square, else throw error
         if (this.numColumns() != this.numRows()) {
-            String error = String.format("The matrix %s is not square. Householder's requires a square matrix");
+            String error = String.format("The matrix %s is not square. Householder's requires a square matrix", this);
             throw new Exception(error);
         }
 
@@ -439,6 +439,39 @@ public class Matrix {
         }
 
         return A;
+    }
+
+    //Takes a square, orthoganal matrix, and applies QR decomp
+    //Returns: the upper-triangular matrix
+    //
+    public Matrix qr(double sigma, int maxIterations) throws Exception {
+        Matrix B = this.householders();
+        int i = 0;
+
+        do{
+            Matrix Qt = Matrix.createIdentityMatrix(B.numRows());
+            for(int k = 0; k < this.numRows() - 1; k++) {
+                double c, s;
+                double Bkk = B.getValueAt(k, k);
+                double denominator = Math.sqrt(Math.pow(Bkk, 2) + Math.pow(B.getValueAt(k + 1, k), 2));
+                c = Bkk / denominator;
+                s = B.getValueAt(k + 1, k) / denominator;
+
+                Matrix P = Matrix.createIdentityMatrix(B.numRows());
+                P.setMatrix(k, k, c);
+                P.setMatrix(k + 1, k + 1, c);
+                P.setMatrix(k + 1, k, -1 * s);
+                P.setMatrix(k, k + 1, P.getValueAt(k + 1, k));
+
+                B = Matrix.multiply(P, B);
+                Qt = Matrix.multiply(P, Qt);
+            }
+            B = Matrix.multiply(B, Matrix.transpose(Qt));
+            i++;
+        } while(!B.isUpperBlockTriangular(sigma) && i < maxIterations);
+        String debug = String.format("QR Method converged in %d iterations", i);
+        System.err.println(debug);
+        return B;
     }
 
     public boolean isUpperBlockTriangular(double sigma){

@@ -784,6 +784,72 @@ public class MatrixTest {
             assertEquals(68.0 / 75.0, householders.getValueAt(3, 2), .00001);
             assertEquals(149.0/75.0, householders.getValueAt(3, 3), .00001);
 
+            //Another example
+            Matrix testTwo = new Matrix(new double[][]{
+                    {4, 2, 2, 1},
+                    {2, -3, 1, 1},
+                    {2, 1, 3, 1},
+                    {1, 1, 1, 2}
+            });
+            testTwo = testTwo.householders();
+            assertEquals(4, testTwo.getValueAt(0, 0), .00001);
+            assertEquals(-3, testTwo.getValueAt(0, 1), .00001);
+            assertEquals(0, testTwo.getValueAt(0, 2), .00001);
+            assertEquals(0, testTwo.getValueAt(0, 3), .00001);
+
+            assertEquals(-3, testTwo.getValueAt(1, 0), .00001);
+            assertEquals(2, testTwo.getValueAt(1, 1), .00001);
+            assertEquals(3.162277, testTwo.getValueAt(1, 2), .00001);
+            assertEquals(0, testTwo.getValueAt(1, 3), .00001);
+
+            assertEquals(0, testTwo.getValueAt(2, 0), .00001);
+            assertEquals(3.16227766, testTwo.getValueAt(2, 1), .00001);
+            assertEquals(-1.4, testTwo.getValueAt(2, 2), .00001);
+            assertEquals(-0.2, testTwo.getValueAt(2, 3), .00001);
+
+            assertEquals(0, testTwo.getValueAt(3, 0), .00001);
+            assertEquals(0, testTwo.getValueAt(3, 1), .00001);
+            assertEquals(-0.2, testTwo.getValueAt(3, 2), .00001);
+            assertEquals(1.4, testTwo.getValueAt(3, 3), .00001);
+
+        } catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testQR(){
+        double sigma = .000001;
+        Matrix exampleMatrix = new Matrix(new double[][]{
+                {-3.9, -0.6, -3.9, 0.4},
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, 1, 0}
+        });
+        try {
+            Matrix qr = exampleMatrix.qr(sigma, 100000);
+
+//            assertEquals(11.0905, qr.getValueAt(0, 0), 0);
+//            assertEquals(0.0902, qr.getValueAt(0, 1), 0);
+//            assertEquals(-4.6887, qr.getValueAt(0, 2), 0);
+//            assertEquals(-0.9918, qr.getValueAt(0, 3), 0);
+//
+//            assertEquals(0, qr.getValueAt(1, 0), 0);
+//            assertEquals(-11.9160, qr.getValueAt(1, 1), 0);
+//            assertEquals(-0.7068, qr.getValueAt(1, 2), 0);
+//            assertEquals(-11.6725, qr.getValueAt(1, 3), 0);
+//
+//            assertEquals(0, qr.getValueAt(2, 0), 0);
+//            assertEquals(0, qr.getValueAt(2, 1), 0);
+//            assertEquals(4.8494, qr.getValueAt(2, 2), 0);
+//            assertEquals(-2.0417, qr.getValueAt(2, 3), 0);
+//
+//            assertEquals(0, qr.getValueAt(3, 0), 0);
+//            assertEquals(0, qr.getValueAt(3, 1), 0);
+//            assertEquals(0, qr.getValueAt(3, 2), 0);
+//            assertEquals(0.7755, qr.getValueAt(3, 3), 0);
+            fail();
         } catch (Exception e){
             e.printStackTrace();
             fail();
