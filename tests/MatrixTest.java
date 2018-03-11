@@ -533,6 +533,13 @@ public class MatrixTest {
         assertEquals(0, augmentedMatrix.getValueAt(2,1), 0);
         assertEquals(1.0, augmentedMatrix.getValueAt(2,2), 0);
         assertEquals(6.0, augmentedMatrix.getValueAt(2,3), 0);
+
+        Matrix moreRows = new Matrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9},
+                {10, 11, 12}
+        });
     }
 
     @Test
@@ -987,7 +994,7 @@ public class MatrixTest {
                 {1, 4, -3, 9}
         });
         try {
-            Matrix[] results = matrix.danTest();
+            Matrix[] results = matrix.danilevsky();
             Matrix e = results[0];
             assertEquals(1.0, e.getValueAt(0,0),0);
 
