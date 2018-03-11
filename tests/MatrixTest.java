@@ -460,9 +460,9 @@ public class MatrixTest {
     }
 
     @Test
-    public void testPivot(){
+    public void testPivotRow(){
         Matrix augmentedMatrix = createTestAugmentedMatrix();
-        augmentedMatrix = augmentedMatrix.pivot(1,0);
+        augmentedMatrix = augmentedMatrix.pivotRow(1,0);
 
         assertEquals(-2.0, augmentedMatrix.getValueAt(0,0), 0);
         assertEquals(2.0, augmentedMatrix.getValueAt(0,1), 0);
@@ -479,7 +479,7 @@ public class MatrixTest {
         assertEquals(-2.0, augmentedMatrix.getValueAt(2,2), 0);
         assertEquals(6.0, augmentedMatrix.getValueAt(2,3), 0);
 
-        augmentedMatrix = augmentedMatrix.pivot(2,0);
+        augmentedMatrix = augmentedMatrix.pivotRow(2,0);
 
         assertEquals(0.0, augmentedMatrix.getValueAt(0,0), 0);
         assertEquals(1.0, augmentedMatrix.getValueAt(0,1), 0);
@@ -495,6 +495,44 @@ public class MatrixTest {
         assertEquals(2.0, augmentedMatrix.getValueAt(2,1), 0);
         assertEquals(-1.0, augmentedMatrix.getValueAt(2,2), 0);
         assertEquals(-1.0, augmentedMatrix.getValueAt(2,3), 0);
+    }
+
+    @Test
+    public void testPivotColumn(){
+        Matrix augmentedMatrix = createTestAugmentedMatrix();
+        augmentedMatrix = augmentedMatrix.pivotColumn(1,0);
+
+        assertEquals(-1.0, augmentedMatrix.getValueAt(0,0), 0);
+        assertEquals(1.0, augmentedMatrix.getValueAt(0,1), 0);
+        assertEquals(0, augmentedMatrix.getValueAt(0,2), 0);
+        assertEquals(2.0, augmentedMatrix.getValueAt(0,3), 0);
+
+        assertEquals(2.0, augmentedMatrix.getValueAt(1,0), 0);
+        assertEquals(-2.0, augmentedMatrix.getValueAt(1,1), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(1,2), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(1,3), 0);
+
+        assertEquals(1.0, augmentedMatrix.getValueAt(2,0), 0);
+        assertEquals(0.0, augmentedMatrix.getValueAt(2,1), 0);
+        assertEquals(-2.0, augmentedMatrix.getValueAt(2,2), 0);
+        assertEquals(6.0, augmentedMatrix.getValueAt(2,3), 0);
+
+        augmentedMatrix = augmentedMatrix.pivotColumn(2,0);
+
+        assertEquals(0.0, augmentedMatrix.getValueAt(0,0), 0);
+        assertEquals(1.0, augmentedMatrix.getValueAt(0,1), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(0,2), 0);
+        assertEquals(2.0, augmentedMatrix.getValueAt(0,3), 0);
+
+        assertEquals(-1.0, augmentedMatrix.getValueAt(1,0), 0);
+        assertEquals(-2.0, augmentedMatrix.getValueAt(1,1), 0);
+        assertEquals(2.0, augmentedMatrix.getValueAt(1,2), 0);
+        assertEquals(-1.0, augmentedMatrix.getValueAt(1,3), 0);
+
+        assertEquals(-2.0, augmentedMatrix.getValueAt(2,0), 0);
+        assertEquals(0, augmentedMatrix.getValueAt(2,1), 0);
+        assertEquals(1.0, augmentedMatrix.getValueAt(2,2), 0);
+        assertEquals(6.0, augmentedMatrix.getValueAt(2,3), 0);
     }
 
     @Test
@@ -821,11 +859,6 @@ public class MatrixTest {
     @Test
     public void testQR(){
         double sigma = .000001;
-//        Matrix exampleMatrix = new Matrix(new double[][]{
-//                {2, 4, 2},
-//                {-1, 0, -4},
-//                {2, 2, -1}
-//        });
         Matrix exampleMatrix = new Matrix(new double[][]{
                 {1, 3, 0, 0},
                 {3, 2, 1, 0},
@@ -833,7 +866,7 @@ public class MatrixTest {
                 {0, 0, 4, 1}
         });
         try {
-            Matrix qr = exampleMatrix.qr(sigma, 100000);
+            Matrix qr = exampleMatrix.qr(sigma, 10000);
 
             assertEquals(6.3589, qr.getValueAt(0, 0), 0.001);
             assertEquals(0, qr.getValueAt(0, 1), 0.001);
@@ -921,6 +954,52 @@ public class MatrixTest {
         matrices[3] = new Matrix(tableFour);
 
         return matrices;
+    }
+
+//    @Test
+//    public void testDanilevsky(){
+//        Matrix matrix = new Matrix(new double[][]{
+//                {2, -1, 3, 4},
+//                {0, 7, 1, -6},
+//                {5, 8, 0, -3},
+//                {1, 4, -3, 9}
+//        });
+//        Matrix results[] = new Matrix[0];
+//        try {
+//            results = matrix.danilevsky();
+//            Matrix B = results[1];
+//
+//            assertEquals(18, B.getValueAt(0,0), 0);
+//            assertEquals(-83, B.getValueAt(0,1), 0);
+//            assertEquals(-199, B.getValueAt(0,2), 0);
+//            assertEquals(1656.0001, B.getValueAt(0,3), 0);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    @Test
+    public void testDanilevsky(){
+        Matrix matrix = new Matrix(new double[][]{
+                {2, -1, 3, 4},
+                {0, 7, 1, -6},
+                {5, 8, 0, -3},
+                {1, 4, -3, 9}
+        });
+        try {
+            Matrix[] results = matrix.danTest();
+            Matrix e = results[0];
+            assertEquals(1.0, e.getValueAt(0,0),0);
+
+            Matrix B = results[1];
+            double sigma = 0.0001;
+            assertEquals(18, B.getValueAt(0,0), sigma);
+            assertEquals(-83, B.getValueAt(0,1), sigma);
+            assertEquals(-199, B.getValueAt(0,2), sigma);
+            assertEquals(1656.0001, B.getValueAt(0,3), sigma);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Matrix createTestAugmentedMatrix(){
