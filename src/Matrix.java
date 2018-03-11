@@ -515,7 +515,7 @@ public class Matrix {
 
     //TODO
     public Matrix[] danilevsky() throws Exception{
-        Matrix[] results = new Matrix[3];
+        Matrix[] results = new Matrix[4];
         Matrix A = this.copy();
         //Set E=1 and form the augmented 2nxn matrix
         //Q = [A]
@@ -644,6 +644,7 @@ public class Matrix {
         results[0] = e;
         results[1] = B;
         results[2] = P;
+        results[3] = eigenvalues;
         return results;
     }
 
