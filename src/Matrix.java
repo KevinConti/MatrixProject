@@ -133,7 +133,7 @@ public class Matrix {
             }
             //2c: Pivot if necessary
             else if (p > j) {
-                this.setMatrix(this.pivot(p, j).getMatrix());
+                this.setMatrix(this.pivotRow(p, j).getMatrix());
             }
             //2d: Divide row j by the pivot value
             double scalar = this.getValueAt(j, j);
@@ -169,7 +169,7 @@ public class Matrix {
             }
             //2c: Pivot if necessary
             else if (p > j) {
-                gaussianMatrix.setMatrix(gaussianMatrix.pivot(p, j).getMatrix());
+                gaussianMatrix.setMatrix(gaussianMatrix.pivotRow(p, j).getMatrix());
             }
 
             //2e: For each i > j, do row reduction
@@ -205,7 +205,7 @@ public class Matrix {
         return diagonalValue;
     }
 
-    public Matrix pivot(int pivotIndex, int rowToPivotInto){
+    public Matrix pivotRow(int pivotIndex, int rowToPivotInto){
         Matrix pivotedMatrix = new Matrix(this.numRows(), this.numColumns());
         //p=1, j=0
         for (int i = 0; i < pivotedMatrix.numRows(); i++){
@@ -218,6 +218,25 @@ public class Matrix {
                     pivotedMatrix.setMatrix(i, x, this.getValueAt(pivotIndex, x));
                 } else {
                     //Copy row
+                    pivotedMatrix.setMatrix(i, x, this.getValueAt(i, x));
+                }
+            }
+        }
+        return pivotedMatrix;
+    }
+
+    public Matrix pivotColumn(int pivotIndex, int columnToPivotInto){
+        Matrix pivotedMatrix = new Matrix(this.numRows(), this.numColumns());
+        for(int i = 0; i < pivotedMatrix.numRows(); i++){
+            for(int x = 0; x < pivotedMatrix.numColumns(); x++){
+                if(x == pivotIndex){
+                    //copy columnToPivotInto's values
+                    pivotedMatrix.setMatrix(i, x, this.getValueAt(i, columnToPivotInto));
+                } else if (x == columnToPivotInto){
+                    //copy pivotIndex column's values
+                    pivotedMatrix.setMatrix(i, x, this.getValueAt(i, pivotIndex));
+                } else {
+                    //copy row
                     pivotedMatrix.setMatrix(i, x, this.getValueAt(i, x));
                 }
             }
@@ -492,6 +511,242 @@ public class Matrix {
             }
         }
             return bool;
+    }
+
+    public Matrix[] danilevsky() throws Exception {
+        Matrix[] results = new Matrix[3];
+        Matrix A = this.copy();
+        int n = A.numRows();
+        Matrix degenerateCaseFlag = new Matrix(new double[][]{{1}}); //Returns 0 if degenerate case
+        //Augment Matrix q with A on top and I on bottom
+        Matrix Q = new Matrix(2*A.numRows(), A.numColumns());
+        Matrix I = Matrix.createIdentityMatrix(A.numRows());
+        for(int i = 0; i < Q.numRows(); i++){
+            for(int j = 0; j < Q.numColumns(); j++){
+                if(i < A.numRows()){
+                    Q.setMatrix(i, j, A.getValueAt(i, j));
+                } else {
+                    Q.setMatrix(i, j, I.getValueAt(i-I.numRows(), j));
+                }
+            }
+        }
+        for(int k = n - 1; k > 0; k--){
+            //2a: Compute the pivot index
+            int pivotColumn = -1;
+            double greatestMagnitude = -99999;
+            for(int j = 0; j < k; j++){
+                double absValue = Math.abs(A.getValueAt(k, j)); //TODO: Shouldn't this be Q??
+                if(absValue > greatestMagnitude){
+                    pivotColumn = j;
+                    greatestMagnitude = absValue;
+                }
+            }
+            //2b: If greatestMagnitude is 0, set flag to 0 and exit
+//            if(greatestMagnitude == 0){
+//                degenerateCaseFlag.setMatrix(0,0,0);
+//                results[0] = degenerateCaseFlag;
+//                return results;
+//            }
+
+            //2c: Interchange columns p and k-1 of Q
+            Q = Q.pivotColumn(pivotColumn, k-1);
+
+            //2d: Interchange rows p and k-1 of Q
+            Q = Q.pivotRow(pivotColumn, k-1);
+
+            //2e: save row k
+            Matrix rowK = new Matrix(1, Q.numColumns());
+            for(int i = 0; i < n - 1; i++){
+                rowK.setMatrix(0, i, Q.getValueAt(k, i));
+            }
+
+            //2f: Divide column k-1 of Q by Qk, k-1
+            for(int i = 0; i < Q.numRows(); i++){
+                double newValue = Q.getValueAt(i, k-1) / Q.getValueAt(k, k-1);
+                Q.setMatrix(i, k-1, newValue);
+            }
+
+            //2g: For j != k-1, subtract Qkj times column k-1 from column j
+            Matrix tempMatrix = new Matrix (Q.numRows(), Q.numColumns());
+            for(int j = 0; j < Q.numRows(); j++) {
+                for (int x = 0; x < Q.numColumns(); x++) {
+                    if (j != k - 1) {
+                        double temp = Q.getValueAt(j, k-1) * Q.getValueAt(k-1, x);
+                        double oldValue = Q.getValueAt(j, x);
+                        tempMatrix.setMatrix(j, x, oldValue - temp);
+                    } else {
+                        tempMatrix.setMatrix(j, x, Q.getValueAt(j, x));
+                    }
+                }
+            }
+
+            //2h: For j = 0 to < n do
+            for(int j = 0; j < n; j++){
+                //1: Save column Qj as j
+                Matrix columnJ = new Matrix(n, 1);
+                for(int i = 0; i < n; i++){
+                    double valueToStore = Q.getValueAt(i, j);
+                    columnJ.setMatrix(i, 0, valueToStore);
+                }
+                //2: Compute Qk-1,j = r^t * columnJ
+                Matrix calculatedValue = Matrix.multiply(rowK, columnJ);
+                Q.setMatrix(k-1, j, calculatedValue.getValueAt(0,0));
+            }
+        } //end step 2
+
+        //3: Partition Q as Q=B/P, where B and P are nxn
+        Matrix B = new Matrix(this.numColumns(), this.numColumns());
+        Matrix P = new Matrix(this.numColumns(), this.numColumns());
+        for(int i = 0; i < Q.numRows(); i++){
+            for(int j = 0; j < Q.numColumns(); j++){
+                if(i < A.numRows()){
+                    B.setMatrix(i, j, Q.getValueAt(i, j));
+                } else {
+                    P.setMatrix(i-n, j, Q.getValueAt(i-n, j));
+                }
+            }
+        }
+
+        //4 Apply the QR method to compute eigenvalues of A
+
+        //For k=1 to n compute:
+
+        results[0] = degenerateCaseFlag;
+        results[1] = B;
+        results[2] = P;
+        return results;
+    }
+
+    //This method implements arrays, assuming that arrays start at 1 (as the textbook has it)
+    public Matrix[] danTest() throws Exception{
+        Matrix[] results = new Matrix[3];
+        Matrix A = this.copy();
+        //Set E=1 and form the augmented 2nxn matrix
+        //Q = [A]
+        //    [I]
+        Matrix e = new Matrix(new double[][]{{1}});
+        int n = this.numRows();
+        Matrix Q = new Matrix(2*n, n);
+        Matrix I = Matrix.createIdentityMatrix(n);
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                //Setting the top n rows to A
+                if(i < n){
+                    Q.setMatrix(i, j, A.getValueAt(i, j));
+                }
+                //Setting the bottom n rows to I
+                else{
+                    Q.setMatrix(i, j, I.getValueAt(i-n, j));
+                }
+            }
+        }
+        //For k=n down to 2 do:
+        //In other words, start at the highest index, and end at one higher than the lowest index
+        for(int k = n-1; k > 0; k--){
+            //Compute the pivot index 1 <= p < k such that
+            //|Qkp| = max(from 1 to k-1) of |Qkj|
+            //Basically, this is saying to enumerate through p from the start (of the Matrix to ONE LESS THAN
+            //the end of the matrix, and determine the column j which has the highest magnitude out of row k
+            //So, over the entire iteration of k, we will search the entire lower triangle. In any given iteration,
+            //We are only checking row k up to the value of k
+            double greatestMagnitude = -999.9;
+            int p = -1;
+            for(int j = 0; j < k; j++){
+                int currentPivot = j;
+                double absValue = Math.abs(Q.getValueAt(k, j));
+                if(absValue > greatestMagnitude){
+                    p = currentPivot;
+                    greatestMagnitude = absValue;
+                }
+            }
+            //2b: If |Qkp| = 0, set E=0 and exit
+            //If this case is true, we have a unique matrix called a degenerate case,
+            //which is defined as a Matrix in which all elements in row k to the left of column k
+            //are zero
+            //In other words, the lower triangular is all zero
+            if(greatestMagnitude < .0000001){
+                e.setMatrix(0,0,0);
+                results[0] = e;
+                results[1] = Q;
+                return results;
+            }
+
+            //2c: Interchange columns p and k-1 of Q
+            //This is correct as written
+            Q.pivotColumn(p, k-1);
+
+            //2d: Interchange rows p and k-1 of Q
+            Q.pivotRow(p, k-1);
+
+            //2e: Save row k as R0,j = Qk,j for j = 1 to n
+            //In other words, for copy the ENTIRE row k of Q
+            Matrix rowK = new Matrix(1, n);
+            for (int j = 0; j < n; j++){
+                rowK.setMatrix(0, j, Q.getValueAt(k, j));
+            }
+
+            //2f: Divide column k-1 of Q by Qk,k-1
+            //This is correct as written, since k has been normalized
+            //Can also be written as:
+            //Qi,k-1 = (Qi,k-1)/(Qk,k-1)
+            //This step normalizes element Qk,k-1 to unity by dividing the entire column by Qk,k-1
+            for(int i = 0; i < Q.numRows(); i++){
+                double newValue = Q.getValueAt(i, k-1) / Q.getValueAt(k, k-1);
+                Q.setMatrix(i, k-1, newValue);
+            }
+
+            //2g: for j != k-1, subtract Qkj times column k-1 from column j
+            //In other words, Qi,j = Qi,j - Qkj * Qi,k-1
+            for(int i = 0; i < Q.numRows(); i++) {
+                for (int j = 0; j < n; j++) {
+                    if(j != k-1){
+                        double Qij = Q.getValueAt(i, j);
+                        double newValue = Qij - Q.getValueAt(k, j) * Q.getValueAt(i, k-1);
+                        Q.setMatrix(i, j, newValue);
+                    }
+                }
+            }
+
+            //2h: For j=1 to n do:
+            //In other words, for j-0; j < n; j++
+            for(int j = 0; j < n; j++){
+                //1) Save column j as columnJ = Qi,j for i=1 to n
+                Matrix columnJ = new Matrix(n, 1);
+                for(int i = 0; i < n; i++){
+                    columnJ.setMatrix(i, 0, Q.getValueAt(i, j));
+                }
+                //2) Compute Qk-1,j = r*c
+                //The book says to transpose, but we have already properly setup the row and column format
+                Matrix multipliedMatrix = Matrix.multiply(rowK, columnJ); //TODO: Make sure this is 1x1
+                Q.setMatrix(k-1, j, multipliedMatrix.getValueAt(0,0));
+            }
+        }
+        //3: Partition Q as:
+        //Q = [B]
+        //    [P]
+        //B is the companion matrix, P is the transormation matrix
+        Matrix B = new Matrix(this.numColumns(), this.numColumns());
+        Matrix P = new Matrix(this.numColumns(), this.numColumns());
+        for(int i = 0; i < Q.numRows(); i++){
+            for(int j = 0; j < Q.numColumns(); j++){
+                if(i < n){
+                    B.setMatrix(i, j, Q.getValueAt(i, j));
+                } else {
+                    P.setMatrix(i-n, j, Q.getValueAt(i-n, j));
+                }
+            }
+        }
+
+        //4: Apply the QR method to compute the eigenvalues of A
+        Matrix eigenvalues = B.qr(0.000001, 10000);
+        //5:For k=0 to n-1 compute:
+
+
+        results[0] = e;
+        results[1] = B;
+        results[2] = P;
+        return results;
     }
 
     //Class Methods
