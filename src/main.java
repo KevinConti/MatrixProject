@@ -27,6 +27,18 @@ public class main {
         //The determinant of the covariance matrix
         double determinant = covarianceMatrix.determinate();
         System.out.printf("\nThe determinant is %f\n", determinant);
+
+        //All eigenvalues for the covariance matrix
+        Matrix[] results = covarianceMatrix.danilevsky();
+        Matrix eigenvalues = results[3];
+        System.out.printf("\nThe eigenvalues are: %f and %f\n", eigenvalues.getValueAt(0,0), eigenvalues.getValueAt(1,1));
+
+        Matrix qr = covarianceMatrix.qr(.00001, 10000);
+        System.out.printf("\nThe qr matrix is:\n%s\n",qr);
+
+        Matrix jacobi[] = covarianceMatrix.jacobi(.00001);
+        System.out.printf("\nThe jacobi matrix is:\n%s\n",jacobi[0]);
+        System.out.printf("\nThe jacobi eigenvector matrix is:\n%s\n",jacobi[1]);
     }
 
     private static void runMatrixProject(){
