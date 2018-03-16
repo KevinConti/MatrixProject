@@ -39,6 +39,30 @@ public class main {
         Matrix jacobi[] = covarianceMatrix.jacobi(.00001);
         System.out.printf("\nThe jacobi matrix is:\n%s\n",jacobi[0]);
         System.out.printf("\nThe jacobi eigenvector matrix is:\n%s\n",jacobi[1]);
+
+        //Determine the unit vectors
+        Vector[] normalizedVectors = determineUnitVectors(jacobi[1]);
+        System.out.printf("\nThe normalized unit vectors are:\n%s\n%s\n", normalizedVectors[0], normalizedVectors[1]);
+
+    }
+
+    //This method applies the following formula to each column:
+    // unit vector = v/|v|
+    // where where |v| = sqrt(x^2 + y^2)
+    private static Vector[] determineUnitVectors(Matrix jacobiEigenvectorMatrix){
+        //There will be one resulting unit vector for each column in the jacobi eigenvector matrix
+        Vector[] results = new Vector[jacobiEigenvectorMatrix.numColumns()];
+
+        for(int i = 0; i < jacobiEigenvectorMatrix.numColumns(); i++){
+            //For each column:
+            Vector vector = new Vector(jacobiEigenvectorMatrix.getValueAt(0, i), jacobiEigenvectorMatrix.getValueAt(1, i));
+            double aSquaredPlusBSquared = Math.pow(vector.getX(), 2) + Math.pow(vector.getY(), 2);
+            double scalar = 1/Math.sqrt(aSquaredPlusBSquared);
+            Vector finalUnitVector = new Vector(vector.getX() * scalar, vector.getY() * scalar);
+            results[i] = finalUnitVector;
+        }
+
+        return results;
     }
 
     private static void runMatrixProject(){
